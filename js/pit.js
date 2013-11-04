@@ -49,26 +49,25 @@ Game.Pit.prototype.cleanup = function() {
 	for (var j=0;j<Game.DEPTH;j++) {
 		if (this._rows[j] < Game.WIDTH) { continue; }
 
-		/* remove this row, decrement counter */
+		/* remove this row, adjust all other values, update cols/rows accordingly */
+
+		this._rows.splice(j, 1);
+		this._rows.push(0);
+		this._cols = this._cols.map(function(col) { return 0; });
+
 		var data = {};
 		for (var p in this._data) {
 			var xy = XY.fromString(p);
 			if (xy.y == j) { continue; }
 			if (xy.y > j) { xy = new XY(xy.x, xy.y-1); }
 			data[xy] = this._data[p];
+			this._cols[xy.x] = Math.max(this._cols[xy.x], xy.y+1);
 		}
 		this._data = data;
-
-		this._rows.splice(j, 1);
-		this._rows.push(0);
 
 		result++;
 		j--;
 	}
-
-	this._cols = this._cols.map(function(col) { /* decrement max values */
-		return col-result;
-	});
 
 	return result;
 }

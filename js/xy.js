@@ -5,7 +5,7 @@ var XY = function(x, y) {
 
 XY.fromString = function(str) {
 	var parts = str.split(",");
-	return new this(parseInt(parts[0]), parseInt(parts[1]))
+	return new this(parseInt(parts[0]), parseInt(parts[1]));
 }
 
 XY.prototype.toString = function() {
