@@ -49,3 +49,9 @@ We have a handful of judges who are eager to play your games!
 * Questions about Git/GitHub? Please email [support@github.com](mailto:support@github.com) and be sure to include 'GitHub Game Off' in the subject.
 * Questions specific to the GitHub Game Off? Please [create an issue](https://github.com/github/game-off-2013/issues/new). This will be the official FAQ.
 * The official Twitter hashtag is [#ggo13](https://twitter.com/search/realtime?q=%23ggo13).
+
+## DevLog
+
+* Day 1: forked
+* Days 2 to 3: looking for ideas
+* Day 4: got an idea, started first API draft
