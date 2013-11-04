@@ -15,6 +15,10 @@ Game.Piece.create = function(type, color, xy) {
 	return new this(def, color, xy);
 }
 
+Game.Piece.prototype.toString = function() {
+	return this.parts.map(function(part) { return part.toString(); }).join(";");
+}
+
 Game.Piece.prototype.fits = function(pit) {
 	return this.parts.every(function(part) {
 		var xy = this.xy.plus(part);
@@ -28,11 +32,16 @@ Game.Piece.prototype.fits = function(pit) {
 }
 
 Game.Piece.prototype.rotate = function(direction) {
-
+	var sign = (direction > 0 ? new XY(-1, 1) : new XY(1, -1));
+	this.parts = this.parts.map(function(part) {
+		return new XY(part.y*sign.x, part.x*sign.y);
+	});
+	return this;
 }
 
 Game.Piece.prototype.center = function() {
 	this.xy = new XY(Game.WIDTH/2, Game.DEPTH-1);
+	return this;
 }
 
 Game.Piece.prototype.clone = function() {
@@ -40,6 +49,7 @@ Game.Piece.prototype.clone = function() {
 	clone.parts = JSON.parse(JSON.stringify(this.parts));
 	clone.color = JSON.parse(JSON.stringify(this.color));
 	clone.xy = this.xy.clone();
+	return clone;
 }
 
 Game.Piece.prototype.getSize = function(prop) {
