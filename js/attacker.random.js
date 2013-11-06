@@ -20,8 +20,7 @@ Game.Attacker.Random.prototype._poll = function() {
 	var next = this._engine.getNextPiece();
 	if (next) { return; }
 
-	var avail = Object.keys(Game.Piece.DEF);
-	var type = avail[Math.floor(Math.random()*avail.length)];
+	var type = Object.keys(Game.Piece.DEF).random();
 
 	var piece = Game.Piece.create(type);
 	this._engine.setNextPiece(piece);

@@ -27,7 +27,7 @@ Game.Cell.prototype.build = function(parent) {
 
 Game.Cell.prototype.clone = function() {
 	var clone = new this.constructor(this._xy, this._color);
-	return this;
+	return clone;
 }
 
 Game.Cell.prototype._position = function() {

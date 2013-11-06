@@ -1,6 +1,6 @@
 Game.Engine = function(options) {
 	this._options = {
-		interval: 500,
+		interval: 1000,
 		money: 10000
 	}
 	for (var p in options) { this._options[p] = options[p]; }
@@ -12,10 +12,10 @@ Game.Engine = function(options) {
 	}
 
 	this._interval = null;
-	this._pit = new Game.Pit();
-	this._pit.build();
+	this.pit = new Game.Pit();
+	this.pit.build();
 
-	document.body.appendChild(this._pit.node);
+	document.body.appendChild(this.pit.node);
 	
 	this._piece = null;
 	this._nextPiece = null;	
@@ -44,31 +44,31 @@ Game.Engine.prototype.getNextPiece = function() {
 
 Game.Engine.prototype.drop = function() {
 	if (!this._piece) { return; }
-	var removed = this._pit.drop(this._piece);
+	var removed = this.pit.drop(this._piece);
 	this._piece = null;
 	this._status.score += this._computeScore(removed);
 	this._stop();
 	if (this._nextPiece) { this._useNextPiece(); }
 }
 
-Game.Engine.prototype.rotate = function(direction) {
+Game.Engine.prototype.rotate = function() {
 	if (!this._piece) { return; }
-	this._piece.rotate(direction);
-	if (!this._piece.fits(this._pit)) { this._piece.rotate(-direction); }
+	this._piece.rotate(+1);
+	if (!this._piece.fits(this.pit)) { this._piece.rotate(-1); }
 }
 
 Game.Engine.prototype.shift = function(direction) {
 	if (!this._piece) { return; }
 	var xy = new XY(direction, 0);
 	this._piece.setXY(this._piece.getXY().plus(xy));
-	if (!this._piece.fits(this._pit)) {	this._piece.setXY(this._piece.getXY().minus(xy)); }
+	if (!this._piece.fits(this.pit)) {	this._piece.setXY(this._piece.getXY().minus(xy)); }
 }
 
 Game.Engine.prototype._useNextPiece = function() {
 	this._nextPiece.center();
-	this._nextPiece.build(this._pit.node);
+	this._nextPiece.build(this.pit.node);
 
-	if (!this._nextPiece.fits(this._pit)) { /* game over */
+	if (!this._nextPiece.fits(this.pit)) { /* game over */
 		this._status.playing = false;
 		return;
 	}
@@ -81,7 +81,7 @@ Game.Engine.prototype._useNextPiece = function() {
 Game.Engine.prototype._tick = function() {
 	var gravity = new XY(0, -1);
 	this._piece.setXY(this._piece.getXY().plus(gravity));
-	if (!this._piece.fits(this._pit)) {
+	if (!this._piece.fits(this.pit)) {
 		this._piece.setXY(this._piece.getXY().minus(gravity));
 		this.drop();
 	}

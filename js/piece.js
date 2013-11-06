@@ -92,7 +92,7 @@ Game.Piece.prototype.center = function() {
 }
 
 Game.Piece.prototype.clone = function() {
-	var clone = new this.constructor([], null, this._xy);
+	var clone = new this.constructor([], this.price, null, this._xy);
 
 	for (var p in this.cells) {
 		clone.cells[p] = this.cells[p].clone();

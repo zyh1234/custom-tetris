@@ -21,7 +21,7 @@ Game.Defender.Human.prototype.handleEvent = function(e) {
 		break;
 
 		case 38: /* top */
-			this._engine.rotate(+1);
+			this._engine.rotate();
 		break;
 
 		case 40: /* bottom */
