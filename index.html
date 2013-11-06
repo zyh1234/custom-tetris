@@ -5,59 +5,53 @@
 		<title>Inverse Tetris</title>
 		<script src="js/xy.js"></script>
 		<script src="js/game.js"></script>
+		<script src="js/engine.js"></script>
 		<script src="js/pit.js"></script>
 		<script src="js/piece.js"></script>
+		<script src="js/cell.js"></script>
+		<script src="js/attacker.js"></script>
+		<script src="js/attacker.random.js"></script>
+		<script src="js/defender.js"></script>
+		<script src="js/defender.human.js"></script>
+		<link rel="stylesheet" href="style.css" type="text/css" />
 	</head>
 	<body>
 		<script>
-		var pit = new Game.Pit();
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(1, 19);
-		pit.drop(piece);
+			var engine = new Game.Engine();
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(3, 19);
-		pit.drop(piece);
+			var piece = Game.Piece.create("o");
+			piece.setXY(new XY(1, 19));
+			piece.build(engine._pit.node);
+			engine._pit.drop(piece);
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(5, 19);
-		pit.drop(piece);
+			var piece = Game.Piece.create("o");
+			piece.setXY(new XY(3, 19));
+			piece.build(engine._pit.node);
+			engine._pit.drop(piece);
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(7, 19);
-		pit.drop(piece);
+			var piece = Game.Piece.create("o");
+			piece.setXY(new XY(1, 19));
+			piece.build(engine._pit.node);
+			engine._pit.drop(piece);
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(9, 19);
-		pit.drop(piece);
+			var piece = Game.Piece.create("o");
+			piece.setXY(new XY(7, 19));
+			piece.build(engine._pit.node);
+			engine._pit.drop(piece);
 
-		var piece = Game.Piece.create("i").center();
-		piece.xy = new XY(3, 19);
-		pit.drop(piece);
-		var piece = Game.Piece.create("i").center();
-		piece.xy = new XY(8, 19);
-		pit.drop(piece);
+			var piece = Game.Piece.create("o");
+			piece.setXY(new XY(9, 19));
+			piece.build(engine._pit.node);
+			engine._pit.drop(piece);
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(1, 19);
-		pit.drop(piece);
+			var piece = Game.Piece.create("o");
+			engine.setNextPiece(piece);
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(3, 19);
-		pit.drop(piece);
+			var player = new Game.Defender.Human();
+			player.setEngine(engine);
 
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(5, 19);
-		pit.drop(piece);
-
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(7, 19);
-		pit.drop(piece);
-
-		var piece = Game.Piece.create("o").center();
-		piece.xy = new XY(9, 19);
-		pit.drop(piece);
-
+			var random = new Game.Attacker.Random();
+			random.setEngine(engine);
 		</script>
 	</body>
 </html>

@@ -1,63 +1,108 @@
-Game.Piece = function(parts, color, xy) {
-	this.parts = parts;
-	this.color = color || "red";
-	this.xy = xy || new XY();
+Game.Piece = function(parts, price, color, xy) {
+	this.cells = {};
+	this._xy = null;
+	this.node = null;
+	this.price = price;
+
+	parts.forEach(function(part) {
+		var cell = new Game.Cell(part, color);
+		this.cells[part] = cell;
+	}, this);
+
+	this.setXY(xy);
 }
 
-Game.Piece.create = function(type, color, xy) {
-	var defs = {
-		"o": [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(-1, -1)],
-		"i": [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-2, 0)]
+Game.Piece.DEF = {
+	"o": {
+		color: "blue",
+		price: 100,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(-1, -1)]
+	},
+	"i": {
+		color: "red",
+		price: 100,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-2, 0)]
+	},
+	"t": {
+		color: "green",
+		price: 80,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1)]
 	}
+}
 
-	var def = defs[type];
+Game.Piece.create = function(type) {
+	var def = this.DEF[type];
 	if (!def) { throw new Error("Piece '" + type + "' does not exist"); }
-	return new this(def, color, xy);
+	return new this(def.cells, def.price, def.color);
 }
 
 Game.Piece.prototype.toString = function() {
-	return this.parts.map(function(part) { return part.toString(); }).join(";");
+	return Object.keys(this.cells).join(";");
+}
+
+Game.Piece.prototype.setXY = function(xy) {
+	this._xy = xy;
+	if (this.node) { this._position(); }
+}
+
+Game.Piece.prototype.getXY = function() {
+	return this._xy;
+}
+
+Game.Piece.prototype.build = function(parent) {
+	this.node = document.createElement("div");
+	this.node.className = "piece";
+	for (var p in this.cells) { this.cells[p].build(this.node); }
+	this._position();
+	parent.appendChild(this.node);
+	return this;
 }
 
 Game.Piece.prototype.fits = function(pit) {
-	return this.parts.every(function(part) {
-		var xy = this.xy.plus(part);
+	for (var p in this.cells) {
+		var xy = this.cells[p].getXY().plus(this._xy);
 
 		if (xy.x < 0 || xy.x >= Game.WIDTH) { return false; }
 		if (xy.y < 0) { return false; }
-		if (pit.at(xy)) { return false; }
+		if (pit.cells[xy]) { return false; }
+	}
 
-		return true;
-	}, this);
+	return true;
 }
 
 Game.Piece.prototype.rotate = function(direction) {
 	var sign = (direction > 0 ? new XY(-1, 1) : new XY(1, -1));
-	this.parts = this.parts.map(function(part) {
-		return new XY(part.y*sign.x, part.x*sign.y);
-	});
+	var newCells = {};
+
+	for (var p in this.cells) {
+		var cell = this.cells[p];
+		var xy = cell.getXY();
+		var nxy = new XY(xy.y*sign.x, xy.x*sign.y);
+		cell.setXY(nxy);
+		newCells[nxy] = cell;
+	}
+	this.cells = newCells;
+
 	return this;
 }
 
 Game.Piece.prototype.center = function() {
-	this.xy = new XY(Game.WIDTH/2, Game.DEPTH-1);
+	this.setXY(new XY(Game.WIDTH/2, Game.DEPTH-1));
 	return this;
 }
 
 Game.Piece.prototype.clone = function() {
-	var clone = new this.constructor();
-	clone.parts = JSON.parse(JSON.stringify(this.parts));
-	clone.color = JSON.parse(JSON.stringify(this.color));
-	clone.xy = this.xy.clone();
+	var clone = new this.constructor([], null, this._xy);
+
+	for (var p in this.cells) {
+		clone.cells[p] = this.cells[p].clone();
+	}
+
 	return clone;
 }
 
-Game.Piece.prototype.getSize = function(prop) {
-	var min = Infinity;
-	var max = -Infinity;
-	this.parts.forEach(function(part) {
-		min = Math.min(min, part[prop]);
-		max = Math.max(max, part[prop]);
-	});
-	return max-min+1;
+Game.Piece.prototype._position = function() {
+	this.node.style.left = (this._xy.x * Game.CELL) + "px";
+	this.node.style.bottom = (this._xy.y * Game.CELL) + "px";
+	return this;
 }

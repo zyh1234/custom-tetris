@@ -11,3 +11,4 @@
 * Days 2 to 3: looking for ideas
 * Day 4: got an idea, started first API draft
 * Day 5: experiments with the main Engine object, still no visuals
+* Day 6: working engine, visuals, human defender and random attacker

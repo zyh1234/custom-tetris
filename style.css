@@ -1,0 +1,16 @@
+.pit {
+	background-color: #aaa;
+	position: relative;
+}
+
+.piece {
+	position: absolute;
+	transition: all 200ms;
+}
+
+.cell {
+	position: absolute;
+	border-radius: 5px;
+	box-shadow: inset 1px 1px 4px #333;
+	transition: all 200ms;
+}
