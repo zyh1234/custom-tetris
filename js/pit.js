@@ -10,10 +10,10 @@ Game.Pit = function() {
 
 Game.Pit.prototype.clone = function() {
 	var clone = new this.constructor();
-	/* FIXME cells cannot be jsonified! */
-	clone.cells = JSON.parse(JSON.stringify(this.cells));
 	clone.cols = JSON.parse(JSON.stringify(this.cols));
 	clone.rows = JSON.parse(JSON.stringify(this.rows));
+	for (var p in this.cells) { clone.cells[p] = this.cells[p].clone(); }
+
 	return clone;
 }
 
@@ -52,6 +52,7 @@ Game.Pit.prototype.getScore = function() {
 		maxslope = Math.max(maxslope, diff);
 	}
 	
+	return 20*holes + max + cells + maxslope + slope + weight;
 
 	console.log("cells", cells);
 	console.log("holes", holes);
@@ -59,7 +60,6 @@ Game.Pit.prototype.getScore = function() {
 	console.log("maxslope", maxslope);
 	console.log("weight", weight);
 	console.log("max", max);
-	return 20*holes + max + cells + maxslope + slope + weight;
 }
 
 Game.Pit.prototype.drop = function(piece) {
@@ -107,7 +107,6 @@ Game.Pit.prototype._cleanup = function() {
 		var cells = {};
 		for (var p in this.cells) {
 			var cell = this.cells[p];
-			if (!cell.getXY) debugger;
 			var xy = cell.getXY();
 
 			if (xy.y == j) { /* removed row */

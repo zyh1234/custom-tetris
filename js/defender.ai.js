@@ -14,7 +14,7 @@ Game.Defender.AI.prototype.setEngine = function(engine) {
 	}
 	Game.Defender.prototype.setEngine.call(this, engine);
 	if (this._engine) { 
-		this._interval = setInterval(this._poll.bind(this), 300);
+		this._interval = setInterval(this._poll.bind(this), 200);
 	}
 }
 
