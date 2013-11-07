@@ -17,8 +17,8 @@ Game.Engine = function(options) {
 	this.pit = new Game.Pit();
 	this.pit.build();
 
-	document.body.appendChild(this.pit.node);
-	document.body.appendChild(this.gallery.node);
+	document.querySelector("#left").appendChild(this.pit.node);
+	document.querySelector("#right").appendChild(this.gallery.node);
 	
 	this._piece = null;
 	this._nextPiece = null;	

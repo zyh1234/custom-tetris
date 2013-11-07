@@ -26,12 +26,11 @@ Game.Gallery.prototype._build = function() {
 	this.node = document.createElement("div");
 	this.node.id = "gallery";
 
-	for (var type in Game.Piece.DEF) {
-		this._buildPiece(type);
-	}
+	var types = Object.keys(Game.Piece.DEF);
+	types.forEach(this._buildPiece, this);
 }
 
-Game.Gallery.prototype._buildPiece = function(type) {
+Game.Gallery.prototype._buildPiece = function(type, index) {
 	var node = document.createElement("div");
 	node.style.width = (5*Game.CELL) + "px";
 	node.style.height = (5*Game.CELL) + "px";
@@ -49,7 +48,10 @@ Game.Gallery.prototype._buildPiece = function(type) {
 	piece.build(node);
 
 	this.pieces[type] = node;
-	var text = "Price: " + Game.Piece.DEF[type].price;
+	
+	var num = index+1;
+	if (num == 10) { num = 0; }
+	var text = "(" + (num) + ") Price: " + Game.Piece.DEF[type].price;
 	node.appendChild(document.createTextNode(text));
 	this.node.appendChild(node);
 }

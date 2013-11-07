@@ -13,6 +13,7 @@
 		<script src="js/ai.js"></script>
 		<script src="js/attacker.js"></script>
 		<script src="js/attacker.random.js"></script>
+		<script src="js/attacker.human.js"></script>
 		<script src="js/defender.js"></script>
 		<script src="js/defender.human.js"></script>
 		<script src="js/defender.ai.js"></script>
@@ -20,6 +21,8 @@
 		<link rel="stylesheet" href="style.css" type="text/css" />
 	</head>
 	<body>
+		<div id="left"></div>
+		<div id="right"></div>
 		<script>
 			var engine = new Game.Engine();
 /*
@@ -68,7 +71,7 @@
 			var defender = new Game.Defender.AI();
 			defender.setEngine(engine);
 			
-			var attacker = new Game.Attacker.Random();
+			var attacker = new Game.Attacker.Human();
 			attacker.setEngine(engine);
 //			var piece = new Game.Piece("i");
 //			engine.setNextPiece(piece);
