@@ -14,17 +14,37 @@ Game.Piece = function(parts, price, color, xy) {
 
 Game.Piece.DEF = {
 	"o": {
-		color: "blue",
+		color: "#4900ff",
 		price: 100,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(-1, -1)]
 	},
 	"i": {
-		color: "red",
+		color: "#0092ff",
 		price: 100,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-2, 0)]
 	},
+	"s": {
+		color: "#00ff92",
+		price: 80,
+		cells: [new XY(0, 0), new XY(1, 0), new XY(0, -1), new XY(-1, -1)]
+	},
+	"z": {
+		color: "#ff00db",
+		price: 80,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(1, -1)]
+	},
+	"l": {
+		color: "#49ff00",
+		price: 80,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-1, -1)]
+	},
+	"j": {
+		color: "#ff0000",
+		price: 80,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(1, -1)]
+	},
 	"t": {
-		color: "green",
+		color: "#ffdb00",
 		price: 80,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1)]
 	}

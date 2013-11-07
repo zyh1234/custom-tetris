@@ -12,6 +12,6 @@
 .cell {
 	position: absolute;
 	border-radius: 3px;
-	box-shadow: inset 1px 1px 3px #fff, inset -1px -1px 3px #333;
+	box-shadow: 2px 1px 2px #ddd inset, -2px -1px 2px #222 inset;
 	transition: all 200ms;
 }

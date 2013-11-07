@@ -12,7 +12,7 @@ Game.Attacker.Random.prototype.setEngine = function(engine) {
 	}
 	Game.Attacker.prototype.setEngine.call(this, engine);
 	if (this._engine) { 
-		this._interval = setInterval(this._poll.bind(this), 100);
+		this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_ATTACKER);
 	}
 }
 

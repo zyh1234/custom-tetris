@@ -6,6 +6,8 @@ var Game = {
 	DEPTH: 20,
 	WIDTH: 10,
 	CELL: 25,
-	Attacker: {},
-	Defender: {}
+	INTERVAL_ENGINE: 1000,
+	INTERVAL_ATTACKER: 100,
+	INTERVAL_DEFENDER: 250,
+	INTERVAL_DROP: 200
 }

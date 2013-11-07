@@ -83,7 +83,6 @@ Game.Pit.prototype.drop = function(piece) {
 		this.rows[xy.y]++;
 		this.cols[xy.x] = Math.max(this.cols[xy.x], xy.y+1);
 	}
-
 	if (this.node && piece.node) { this.node.removeChild(piece.node); }
 
 	return this._cleanup();
