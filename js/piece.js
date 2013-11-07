@@ -123,7 +123,15 @@ Game.Piece.prototype.center = function() {
 }
 
 Game.Piece.prototype.clone = function() {
-	return new this.constructor(this.type, this.xy);
+	var clone = new this.constructor(this.type);
+
+	clone.xy = this.xy;
+	clone.cells = {};
+	for (var p in this.cells) {
+		clone.cells[p] = this.cells[p].clone();
+	}
+
+	return clone;
 }
 
 Game.Piece.prototype._position = function() {
