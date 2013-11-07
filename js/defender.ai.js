@@ -35,7 +35,7 @@ Game.Defender.AI.prototype._poll = function() {
 		return;
 	}
 	
-	var diff = (this._currentTarget.x - this._currentPiece.getXY().x);
+	var diff = (this._currentTarget.x - this._currentPiece.xy.x);
 	if (!diff) {
 		this._engine.drop();
 		return;

@@ -1,15 +1,13 @@
 Game.Piece = function(parts, price, color, xy) {
 	this.cells = {};
-	this._xy = null;
 	this.node = null;
+	this.xy = xy;
 	this.price = price;
 
 	parts.forEach(function(part) {
 		var cell = new Game.Cell(part, color);
 		this.cells[part] = cell;
 	}, this);
-
-	this.setXY(xy);
 }
 
 Game.Piece.DEF = {
@@ -50,24 +48,39 @@ Game.Piece.DEF = {
 	}
 }
 
+/**
+ * Return all types that are available for a given price
+ */
+Game.Piece.getAvailableTypes = function(price) {
+	var result = [];
+	for (var type in this.DEF) {
+		if (this.DEF[type].price <= price) { result.push(type); }
+	}
+	return result;
+}
+
 Game.Piece.create = function(type) {
 	var def = this.DEF[type];
 	if (!def) { throw new Error("Piece '" + type + "' does not exist"); }
 	return new this(def.cells, def.price, def.color);
 }
 
+Object.defineProperty(Game.Piece.prototype, "xy", {
+	get: function() {
+		return this._xy;
+	},
+
+	set: function(xy) {
+		this._xy = xy;
+		if (this.node) { this._position(); }
+	}
+});
+
+
 Game.Piece.prototype.toString = function() {
 	return Object.keys(this.cells).join(";");
 }
 
-Game.Piece.prototype.setXY = function(xy) {
-	this._xy = xy;
-	if (this.node) { this._position(); }
-}
-
-Game.Piece.prototype.getXY = function() {
-	return this._xy;
-}
 
 Game.Piece.prototype.build = function(parent) {
 	this.node = document.createElement("div");
@@ -80,7 +93,7 @@ Game.Piece.prototype.build = function(parent) {
 
 Game.Piece.prototype.fits = function(pit) {
 	for (var p in this.cells) {
-		var xy = this.cells[p].getXY().plus(this._xy);
+		var xy = this.cells[p].xy.plus(this.xy);
 
 		if (xy.x < 0 || xy.x >= Game.WIDTH) { return false; }
 		if (xy.y < 0) { return false; }
@@ -96,9 +109,9 @@ Game.Piece.prototype.rotate = function(direction) {
 
 	for (var p in this.cells) {
 		var cell = this.cells[p];
-		var xy = cell.getXY();
+		var xy = cell.xy;
 		var nxy = new XY(xy.y*sign.x, xy.x*sign.y);
-		cell.setXY(nxy);
+		cell.xy = nxy;
 		newCells[nxy] = cell;
 	}
 	this.cells = newCells;
@@ -107,12 +120,12 @@ Game.Piece.prototype.rotate = function(direction) {
 }
 
 Game.Piece.prototype.center = function() {
-	this.setXY(new XY(Game.WIDTH/2, Game.DEPTH-1));
+	this.xy = new XY(Game.WIDTH/2, Game.DEPTH-1);
 	return this;
 }
 
 Game.Piece.prototype.clone = function() {
-	var clone = new this.constructor([], this.price, null, this._xy);
+	var clone = new this.constructor([], this.price, null, this.xy);
 
 	for (var p in this.cells) {
 		clone.cells[p] = this.cells[p].clone();
@@ -122,7 +135,7 @@ Game.Piece.prototype.clone = function() {
 }
 
 Game.Piece.prototype._position = function() {
-	this.node.style.left = (this._xy.x * Game.CELL) + "px";
-	this.node.style.bottom = (this._xy.y * Game.CELL) + "px";
+	this.node.style.left = (this.xy.x * Game.CELL) + "px";
+	this.node.style.bottom = (this.xy.y * Game.CELL) + "px";
 	return this;
 }

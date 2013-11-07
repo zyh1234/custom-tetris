@@ -47,9 +47,9 @@ Game.Engine.prototype.drop = function() {
 
 	var gravity = new XY(0, -1);
 	while (this._piece.fits(this.pit)) {
-		this._piece.setXY(this._piece.getXY().plus(gravity));
+		this._piece.xy = this._piece.xy.plus(gravity);
 	}
-	this._piece.setXY(this._piece.getXY().minus(gravity));
+	this._piece.xy = this._piece.xy.minus(gravity);
 
 	this._stop();
 	this._dropping = true;
@@ -67,7 +67,10 @@ Game.Engine.prototype._drop = function() {
 	if (this._nextPiece) { 
 		this._useNextPiece(); 
 	} else {
-		/* FIXME not enough money? */
+		var avail = Game.Piece.getAvailableTypes(this._status.money);
+		if (!avail.length) { /* not enough money! */
+			this._status.playing = false;
+		}
 	}
 }
 
@@ -80,8 +83,8 @@ Game.Engine.prototype.rotate = function() {
 Game.Engine.prototype.shift = function(direction) {
 	if (!this._piece || this._dropping) { return; }
 	var xy = new XY(direction, 0);
-	this._piece.setXY(this._piece.getXY().plus(xy));
-	if (!this._piece.fits(this.pit)) {	this._piece.setXY(this._piece.getXY().minus(xy)); }
+	this._piece.xy = this._piece.xy.plus(xy);
+	if (!this._piece.fits(this.pit)) { this._piece.xy = this._piece.xy.minus(xy); }
 }
 
 Game.Engine.prototype._useNextPiece = function() {
@@ -100,9 +103,9 @@ Game.Engine.prototype._useNextPiece = function() {
 
 Game.Engine.prototype._tick = function() {
 	var gravity = new XY(0, -1);
-	this._piece.setXY(this._piece.getXY().plus(gravity));
+	this._piece.xy = this._piece.xy.plus(gravity);
 	if (!this._piece.fits(this.pit)) {
-		this._piece.setXY(this._piece.getXY().minus(gravity));
+		this._piece.xy = this._piece.xy.minus(gravity);
 		this.drop();
 	}
 }

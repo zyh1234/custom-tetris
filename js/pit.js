@@ -65,19 +65,19 @@ Game.Pit.prototype.getScore = function() {
 Game.Pit.prototype.drop = function(piece) {
 	var gravity = new XY(0, -1);
 	while (piece.fits(this)) {
-		piece.setXY(piece.getXY().plus(gravity));
+		piece.xy = piece.xy.plus(gravity);
 	}
-	piece.setXY(piece.getXY().minus(gravity));
+	piece.xy = piece.xy.minus(gravity);
 
 	for (var p in piece.cells) {
 		var cell = piece.cells[p];
-		var xy = piece.getXY().plus(cell.getXY());
+		var xy = piece.xy.plus(cell.xy);
 
 		if (this.node && cell.node) {
 			this.node.appendChild(cell.node);
 		}
 
-		cell.setXY(xy);
+		cell.xy = xy;
 		this.cells[xy] = cell;
 
 		this.rows[xy.y]++;
@@ -106,7 +106,7 @@ Game.Pit.prototype._cleanup = function() {
 		var cells = {};
 		for (var p in this.cells) {
 			var cell = this.cells[p];
-			var xy = cell.getXY();
+			var xy = cell.xy;
 
 			if (xy.y == j) { /* removed row */
 				if (this.node && cell.node) { this.node.removeChild(cell.node); }
@@ -114,7 +114,7 @@ Game.Pit.prototype._cleanup = function() {
 			} 
 			if (xy.y > j) { xy = new XY(xy.x, xy.y-1); } /* lower xy */
 
-			cell.setXY(xy);
+			cell.xy = xy;
 			cells[xy] = cell;
 			this.cols[xy.x] = Math.max(this.cols[xy.x], xy.y+1);
 		}

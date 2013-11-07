@@ -7,8 +7,8 @@ Game.AI.findBestPosition = function(pit, piece) {
 	
 	/* shift leftwards */
 	var left = new XY(-1, 0);
-	while (piece.fits(pit)) { piece.setXY(piece.getXY().plus(left)); }
-	piece.setXY(piece.getXY().minus(left));
+	while (piece.fits(pit)) { piece.xy = piece.xy.plus(left); }
+	piece.xy = piece.xy.minus(left);
 	
 	/* move rightwards, test scores */
 	var bestScore = Infinity;
@@ -25,10 +25,10 @@ Game.AI.findBestPosition = function(pit, piece) {
 		}
 		
 		if (score == bestScore) {
-			bestPositions.push(piece.getXY().x);
+			bestPositions.push(piece.xy.x);
 		}
 
-		piece.setXY(piece.getXY().minus(left));
+		piece.xy = piece.xy.minus(left);
 	}
 	
 	var x = bestPositions.random();
