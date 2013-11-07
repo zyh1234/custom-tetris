@@ -17,7 +17,7 @@ Object.defineProperty(Game.Cell.prototype, "xy", {
 
 Game.Cell.prototype.build = function(parent) {
 	this.node = document.createElement("div");
-	this.node.className = "cell";
+	this.node.classList.add("cell");
 	this.node.style.width = Game.CELL + "px";
 	this.node.style.height = Game.CELL + "px";
 	this.node.style.backgroundColor = this._color;
@@ -27,8 +27,7 @@ Game.Cell.prototype.build = function(parent) {
 }
 
 Game.Cell.prototype.clone = function() {
-	var clone = new this.constructor(this.xy, this._color);
-	return clone;
+	return new this.constructor(this.xy, this._color);
 }
 
 Game.Cell.prototype._position = function() {

@@ -22,6 +22,6 @@ Game.Attacker.Random.prototype._poll = function() {
 
 	var type = Object.keys(Game.Piece.DEF).random();
 
-	var piece = Game.Piece.create(type);
+	var piece = new Game.Piece(type);
 	this._engine.setNextPiece(piece);
 }

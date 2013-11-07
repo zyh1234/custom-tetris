@@ -15,3 +15,18 @@
 	box-shadow: 2px 1px 2px #ddd inset, -2px -1px 2px #222 inset;
 	transition: all 200ms;
 }
+
+.gallery {
+	position: relative;
+	border: 3px solid #999;
+	border-radius: 15px;
+	float: left;
+	margin: 0.5em;
+	text-align: center;
+	opacity: 0.9;
+}
+
+.gallery.next {
+	border-color: #c66;
+	opacity: 1;
+}

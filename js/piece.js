@@ -1,12 +1,16 @@
-Game.Piece = function(parts, price, color, xy) {
-	this.cells = {};
-	this.node = null;
-	this.xy = xy;
-	this.price = price;
+Game.Piece = function(type) {
+	var def = this.constructor.DEF[type];
+	if (!def) { throw new Error("Piece '" + type + "' does not exist"); }
 
-	parts.forEach(function(part) {
-		var cell = new Game.Cell(part, color);
-		this.cells[part] = cell;
+	this.type = type;
+	this.xy = new XY();
+	this.price = def.price;
+	this.node = null;
+	this.cells = {};
+
+	def.cells.forEach(function(xy) {
+		var cell = new Game.Cell(xy, def.color);
+		this.cells[xy] = cell;
 	}, this);
 }
 
@@ -59,12 +63,6 @@ Game.Piece.getAvailableTypes = function(price) {
 	return result;
 }
 
-Game.Piece.create = function(type) {
-	var def = this.DEF[type];
-	if (!def) { throw new Error("Piece '" + type + "' does not exist"); }
-	return new this(def.cells, def.price, def.color);
-}
-
 Object.defineProperty(Game.Piece.prototype, "xy", {
 	get: function() {
 		return this._xy;
@@ -84,7 +82,7 @@ Game.Piece.prototype.toString = function() {
 
 Game.Piece.prototype.build = function(parent) {
 	this.node = document.createElement("div");
-	this.node.className = "piece";
+	this.node.classList.add("piece");
 	for (var p in this.cells) { this.cells[p].build(this.node); }
 	this._position();
 	parent.appendChild(this.node);
@@ -125,13 +123,7 @@ Game.Piece.prototype.center = function() {
 }
 
 Game.Piece.prototype.clone = function() {
-	var clone = new this.constructor([], this.price, null, this.xy);
-
-	for (var p in this.cells) {
-		clone.cells[p] = this.cells[p].clone();
-	}
-
-	return clone;
+	return new this.constructor(this.type, this.xy);
 }
 
 Game.Piece.prototype._position = function() {

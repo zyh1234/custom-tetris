@@ -12,10 +12,13 @@ Game.Engine = function(options) {
 
 	this._interval = null;
 	this._dropping = false;
+
+	this.gallery = new Game.Gallery(this);
 	this.pit = new Game.Pit();
 	this.pit.build();
 
 	document.body.appendChild(this.pit.node);
+	document.body.appendChild(this.gallery.node);
 	
 	this._piece = null;
 	this._nextPiece = null;	
@@ -27,7 +30,11 @@ Game.Engine.prototype.setNextPiece = function(nextPiece) {
 	this._nextPiece = nextPiece;
 	this._status.money -= nextPiece.price;
 
-	if (!this._piece) { this._useNextPiece(); }
+	if (!this._piece) { 
+		this._useNextPiece(); 
+	} else {
+		this.gallery.sync();
+	}
 }
 
 Game.Engine.prototype.getPiece = function() {
@@ -98,6 +105,7 @@ Game.Engine.prototype._useNextPiece = function() {
 
 	this._piece = this._nextPiece;
 	this._nextPiece = null;
+	this.gallery.sync();
 	this._start();
 }
 

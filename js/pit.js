@@ -19,7 +19,7 @@ Game.Pit.prototype.clone = function() {
 
 Game.Pit.prototype.build = function() {
 	this.node = document.createElement("div");
-	this.node.className = "pit";
+	this.node.classList.add("pit");
 	this.node.style.width = (Game.WIDTH * Game.CELL) + "px";
 	this.node.style.height = (Game.DEPTH * Game.CELL) + "px";
 	return this;
@@ -36,11 +36,10 @@ Game.Pit.prototype.getScore = function() {
 	for (var p in this.cells) { 
 		cells++;
 
-		var xy = XY.fromString(p);
+		var xy = this.cells[p].xy;
 		weight += xy.y+1;
 
-		/* hole? */
-		if (xy.y > 0) {
+		if (xy.y > 0) { /* hole? */
 			xy = new XY(xy.x, xy.y-1);
 			if (!(xy in this.cells)) { holes++; }
 		}
