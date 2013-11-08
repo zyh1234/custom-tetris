@@ -14,4 +14,4 @@
 * Day 4: got an idea, started first API draft
 * Day 5: experiments with the main Engine object, still no visuals
 * Day 6: working engine, visuals, human defender, ai defender
-* Day 7: bugfixing async issues, basic set of pieces
+* Day 7: bugfixing async issues, basic set of pieces, readonly gallery
