@@ -23,7 +23,7 @@ html, body {
 .cell {
 	position: absolute;
 	border-radius: 3px;
-	box-shadow: 2px 1px 2px #ddd inset, -2px -1px 2px #222 inset;
+	box-shadow: 1px 1px 1px #ddd inset, -1px -1px 1px #222 inset;
 	transition: all 200ms;
 }
 
@@ -34,16 +34,19 @@ html, body {
 	float: left;
 	margin: 0.5em;
 	text-align: center;
-	opacity: 0.7;
+}
+
+.gallery.disabled {
+	opacity: 0.5;
 }
 
 .gallery.next {
-	border-color: #c66;
-	opacity: 1;
-	box-shadow: 0 0 3px #c66;
+	box-shadow: 0 0 4px 2px #f00;
 	background-color: #eee;
+	border-color: #000;
 }
 
-.attacker-human .gallery {
+.attacker-human .gallery:hover:not(.disabled) {
 	cursor: pointer;
+	border-color: #000;
 }

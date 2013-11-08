@@ -14,6 +14,7 @@
 		<script src="js/attacker.js"></script>
 		<script src="js/attacker.random.js"></script>
 		<script src="js/attacker.human.js"></script>
+		<script src="js/attacker.ai.js"></script>
 		<script src="js/defender.js"></script>
 		<script src="js/defender.human.js"></script>
 		<script src="js/defender.ai.js"></script>
@@ -26,53 +27,19 @@
 		<script>
 			var engine = new Game.Engine();
 /*
-			var piece = Game.Piece.create("o");
-			piece.setXY(new XY(1, 19));
-			piece.build(engine.pit.node);
-			engine.pit.drop(piece);
-
-			var piece = Game.Piece.create("o");
-			piece.setXY(new XY(9, 19));
-			piece.build(engine.pit.node);
-			engine.pit.drop(piece);
-
-			var piece = Game.Piece.create("o");
-			piece.setXY(new XY(1, 19));
-			piece.build(engine.pit.node);
-			engine.pit.drop(piece);
-
-			var piece = Game.Piece.create("o");
-			piece.setXY(new XY(7, 19));
-			piece.build(engine.pit.node);
-			engine.pit.drop(piece);
-
-			var piece = Game.Piece.create("o");
-			piece.setXY(new XY(9, 19));
-			piece.build(engine.pit.node);
-			engine.pit.drop(piece);
-
-			var piece = Game.Piece.create("i");
+			var piece = new Game.Piece("s");
 			piece.center();
 			piece.build(engine.pit.node);
 			engine.pit.drop(piece);
-
-			var piece = Game.Piece.create("i");
-			piece.rotate(1);
-			piece.setXY(new XY(2, 19));
-			piece.build(engine.pit.node);
-			engine.pit.drop(piece);
-
-
-
-//			piece.build(engine.pit.node);
-//			engine.pit.drop(piece);
+			engine.pit.getScore();
 */
 
 			var defender = new Game.Defender.AI();
 			defender.setEngine(engine);
 			
-			var attacker = new Game.Attacker.Human();
+			var attacker = new Game.Attacker.Random();
 			attacker.setEngine(engine);
+			
 //			var piece = new Game.Piece("i");
 //			engine.setNextPiece(piece);
 

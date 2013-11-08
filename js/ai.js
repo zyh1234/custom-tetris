@@ -61,3 +61,13 @@ Game.AI.findBestPositionRotation = function(pit, piece) {
 	
 	return bestRotations.random();
 }
+
+Game.AI.scoreTypes = function(pit, types) {
+	var scores = {};
+	types.forEach(function(type) {
+		var piece = new Game.Piece(type);
+		scores[type] = this.findBestPositionRotation(pit, piece).score;
+	}, this);
+
+	return scores;
+}

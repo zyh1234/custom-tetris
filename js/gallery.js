@@ -12,12 +12,19 @@ Game.Gallery.prototype.sync = function() {
 	var nextPiece = this._engine.getNextPiece();
 	if (nextPiece) { nextType = nextPiece.type; }
 
+	var money = this._engine.getStatus().money;
+
 	for (var type in this.pieces) {
 		var piece = this.pieces[type];
 		if (type == nextType) {
 			piece.classList.add("next");
 		} else {
 			piece.classList.remove("next");
+		}
+		if (Game.Piece.DEF[type].price > money) {
+			piece.classList.add("disabled");
+		} else {
+			piece.classList.remove("disabled");
 		}
 	}
 }
@@ -43,7 +50,7 @@ Game.Gallery.prototype._buildPiece = function(type, index) {
 		xy.x += 0.5; 
 		xy.y += 0.5; 
 	}
-	if (type == "i") { xy.x += 0.5; }
+	if (type == "i" || type == "-") { xy.x += 0.5; }
 	piece.xy = xy;
 	piece.build(node);
 

@@ -1,6 +1,6 @@
-# Test
+# Custom Tetris
 
-...
+Play the classic Tetris game *the way you like it!* Adjust the rules, **change** the sides!
 
 ## Instructions
 
@@ -15,3 +15,4 @@
 * Day 5: experiments with the main Engine object, still no visuals
 * Day 6: working engine, visuals, human defender, ai defender
 * Day 7: bugfixing async issues, basic set of pieces, readonly gallery
+* Day 8: human (working) and ai (unusable) attackers, bonus pieces

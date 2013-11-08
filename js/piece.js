@@ -16,39 +16,55 @@ Game.Piece = function(type) {
 
 Game.Piece.DEF = {
 	"o": {
-		color: "#4900ff",
+		color: "#999",
 		price: 100,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(-1, -1)]
 	},
 	"i": {
-		color: "#0092ff",
-		price: 100,
+		color: "#6cf",
+		price: 50,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-2, 0)]
 	},
 	"s": {
-		color: "#00ff92",
-		price: 80,
+		color: "#6c0",
+		price: 200,
 		cells: [new XY(0, 0), new XY(1, 0), new XY(0, -1), new XY(-1, -1)]
 	},
 	"z": {
-		color: "#ff00db",
-		price: 80,
+		color: "#ff3",
+		price: 200,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(1, -1)]
 	},
 	"l": {
-		color: "#49ff00",
-		price: 80,
+		color: "#f93",
+		price: 150,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-1, -1)]
 	},
 	"j": {
-		color: "#ff0000",
-		price: 80,
+		color: "#939",
+		price: 150,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(1, -1)]
 	},
 	"t": {
-		color: "#ffdb00",
-		price: 80,
+		color: "#c33",
+		price: 100,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1)]
+	},
+/***/
+	"-": {
+		color: "#fff",
+		price: 20,
+		cells: [new XY(0, 0), new XY(-1, 0)]
+	},
+	"+": {
+		color: "#f9c",
+		price: 300,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1), new XY(0, 1)]
+	},
+	"u": {
+		color: "#c93",
+		price: 300,
+		cells: [new XY(0, 0), new XY(-1, 0), new XY(-1, 1), new XY(1, 0), new XY(1, -1)]
 	}
 }
 
@@ -123,7 +139,7 @@ Game.Piece.prototype.center = function() {
 }
 
 Game.Piece.prototype.clone = function() {
-	var clone = new this.constructor(this.type);
+	var clone = new Game.Piece(this.type);
 
 	clone.xy = this.xy;
 	clone.cells = {};
