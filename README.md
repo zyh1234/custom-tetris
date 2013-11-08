@@ -1,6 +1,6 @@
 # Custom Tetris
 
-Play the classic Tetris game *the way you like it!* Adjust the rules, **change** the sides!
+Play the classic Tetris game **the way you like it!** Adjust the rules, *change* the sides!
 
 ## Instructions
 
