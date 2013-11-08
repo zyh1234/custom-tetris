@@ -1,6 +1,6 @@
 Game.Engine = function(options) {
 	this._options = {
-		money: 10000
+		money: 100000
 	}
 	for (var p in options) { this._options[p] = options[p]; }
 
