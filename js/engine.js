@@ -7,6 +7,8 @@ Game.Engine = function(options) {
 		score: 0,
 		playing: true
 	}
+	document.querySelector("#status").innerHTML = "Playing";
+	this._setScore(0);
 
 	this._interval = null;
 	this._dropping = false;
@@ -22,21 +24,18 @@ Game.Engine = function(options) {
 	this._piece = null;
 	this._nextPiece = null;
 	this._refreshAvailable();
+	this.gallery.sync();
+}
+
+Game.Engine.prototype.destroy = function() {
+	document.querySelector("#left").innerHTML = "";
+	document.querySelector("#right").innerHTML = "";
 }
 
 Game.Engine.prototype.setNextPiece = function(nextPiece) {
 	var type = nextPiece.type;
 	var avail = this._availableTypes[type] || 0;
 	if (avail < 1) { return; }
-
-	avail--;
-	if (avail) {
-		this._availableTypes[type] = avail;
-	} else {
-		delete this._availableTypes[type];
-	}
-	
-	if (!Object.keys(this._availableTypes).length) { this._refreshAvailable(); }
 
 	this._nextPiece = nextPiece;
 	if (!this._piece) { 
@@ -83,7 +82,7 @@ Game.Engine.prototype._drop = function() {
 	this._dropping = false;
 	var removed = this.pit.drop(this._piece);
 	this._piece = null;
-	this._status.score += this._computeScore(removed);
+	this._setScore(this._status.score + this._computeScore(removed));
 	if (this._nextPiece) { this._useNextPiece(); }
 }
 
@@ -107,18 +106,33 @@ Game.Engine.prototype._refreshAvailable = function() {
 }
 
 Game.Engine.prototype._useNextPiece = function() {
+	var type = this._nextPiece.type;
+	var avail = this._availableTypes[type]-1;
+	if (avail) {
+		this._availableTypes[type] = avail;
+	} else {
+		delete this._availableTypes[type];
+	}
+	if (!Object.keys(this._availableTypes).length) { this._refreshAvailable(); }
+	
 	this._nextPiece.center();
 	this._nextPiece.build(this.pit.node);
 
-	if (!this._nextPiece.fits(this.pit)) { /* game over */
+	if (this._nextPiece.fits(this.pit)) {
+		this._piece = this._nextPiece;
+		this._nextPiece = null;
+		this._start();
+	} else { /* game over */
 		this._status.playing = false;
-		return;
+		document.querySelector("#status").innerHTML = "GAME OVER";
 	}
 
-	this._piece = this._nextPiece;
-	this._nextPiece = null;
 	this.gallery.sync();
-	this._start();
+}
+
+Game.Engine.prototype._setScore = function(score) {
+	this._status.score = score;
+	document.querySelector("#score").innerHTML = score;
 }
 
 Game.Engine.prototype._tick = function() {

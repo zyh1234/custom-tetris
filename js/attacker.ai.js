@@ -1,5 +1,5 @@
 Game.Attacker.AI = function(engine) {
-	Game.Attacker.call(this, engine);
+	Game.Player.call(this, engine);
 	this._lastType = "";
 	this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_ATTACKER);
 }

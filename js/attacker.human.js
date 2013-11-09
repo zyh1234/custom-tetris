@@ -22,7 +22,7 @@ Game.Attacker.Human.prototype.handleEvent = function(e) {
 				if (node.hasAttribute("data-type")) { type = node.getAttribute("data-type"); }
 				node = node.parentNode;
 			}
-			this._tryType(type);
+			if (type) { this._tryType(type); }
 		break;
 		
 		case "keydown":

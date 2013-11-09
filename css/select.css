@@ -1,0 +1,10 @@
+#attacker, #defender {
+	position: absolute;
+	top: 0;
+	padding-top: 1em;
+}
+
+#left #defender, #right #attacker {
+	left: 50%;
+	transform: translate(-50%, 0);
+}

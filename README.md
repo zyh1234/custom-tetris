@@ -16,3 +16,4 @@ Play the classic Tetris game **the way you like it!** Adjust the rules, *change*
 * Day 6: working engine, visuals, human defender, ai defender
 * Day 7: bugfixing async issues, basic set of pieces, readonly gallery
 * Day 8: human (working) and ai (unusable) attackers, bonus pieces
+* Day 9: refactored attacker rules, UI tuning, Game.App draft
