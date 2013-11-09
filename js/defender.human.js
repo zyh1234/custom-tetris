@@ -1,13 +1,12 @@
-Game.Defender.Human = function() {
-	Game.Defender.call(this);
+Game.Defender.Human = function(engine) {
+	Game.Player.call(this, engine);
+	window.addEventListener("keydown", this);
 }
+Game.Defender.Human.prototype = Object.create(Game.Player.prototype);
 
-Game.Defender.Human.prototype = Object.create(Game.Defender.prototype);
-
-Game.Defender.Human.prototype.setEngine = function(engine) {
-	if (this._engine) { window.removeEventListener("keydown", this); }
-	Game.Defender.prototype.setEngine.call(this, engine);
-	if (this._engine) { window.addEventListener("keydown", this); }
+Game.Defender.Human.prototype.destroy = function() {
+	window.removeEventListener("keydown", this);
+	Game.Player.prototype.destroy.call(this);
 }
 
 Game.Defender.Human.prototype.handleEvent = function(e) {

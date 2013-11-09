@@ -1,17 +1,16 @@
 Game.Engine = function(options) {
 	this._options = {
-		money: 100000
 	}
 	for (var p in options) { this._options[p] = options[p]; }
 
 	this._status = {
-		money: this._options.money,
 		score: 0,
 		playing: true
 	}
 
 	this._interval = null;
 	this._dropping = false;
+	this._availableTypes = {};
 
 	this.gallery = new Game.Gallery(this);
 	this.pit = new Game.Pit();
@@ -21,20 +20,34 @@ Game.Engine = function(options) {
 	document.querySelector("#right").appendChild(this.gallery.node);
 	
 	this._piece = null;
-	this._nextPiece = null;	
+	this._nextPiece = null;
+	this._refreshAvailable();
 }
 
 Game.Engine.prototype.setNextPiece = function(nextPiece) {
-	if (nextPiece.price > this._status.money) { return; }
+	var type = nextPiece.type;
+	var avail = this._availableTypes[type] || 0;
+	if (avail < 1) { return; }
+
+	avail--;
+	if (avail) {
+		this._availableTypes[type] = avail;
+	} else {
+		delete this._availableTypes[type];
+	}
+	
+	if (!Object.keys(this._availableTypes).length) { this._refreshAvailable(); }
 
 	this._nextPiece = nextPiece;
-	this._status.money -= nextPiece.price;
-
 	if (!this._piece) { 
 		this._useNextPiece(); 
 	} else {
 		this.gallery.sync();
 	}
+}
+
+Game.Engine.prototype.getAvailableTypes = function() {
+	return this._availableTypes;
 }
 
 Game.Engine.prototype.getPiece = function() {
@@ -71,14 +84,7 @@ Game.Engine.prototype._drop = function() {
 	var removed = this.pit.drop(this._piece);
 	this._piece = null;
 	this._status.score += this._computeScore(removed);
-	if (this._nextPiece) { 
-		this._useNextPiece(); 
-	} else {
-		var avail = Game.Piece.getAvailableTypes(this._status.money);
-		if (!avail.length) { /* not enough money! */
-			this._status.playing = false;
-		}
-	}
+	if (this._nextPiece) { this._useNextPiece(); }
 }
 
 Game.Engine.prototype.rotate = function() {
@@ -92,6 +98,12 @@ Game.Engine.prototype.shift = function(direction) {
 	var xy = new XY(direction, 0);
 	this._piece.xy = this._piece.xy.plus(xy);
 	if (!this._piece.fits(this.pit)) { this._piece.xy = this._piece.xy.minus(xy); }
+}
+
+Game.Engine.prototype._refreshAvailable = function() {
+	for (var type in Game.Piece.DEF) {
+		this._availableTypes[type] = Game.Piece.DEF[type].avail;
+	}
 }
 
 Game.Engine.prototype._useNextPiece = function() {

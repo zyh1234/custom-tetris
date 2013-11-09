@@ -1,21 +1,15 @@
-Game.Defender.AI = function() {
-	Game.Defender.call(this);
-	this._interval = null;
+Game.Defender.AI = function(engine) {
+	Game.Player.call(this, engine);
+	this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_DEFENDER);
 	this._currentPiece = null;
 	this._currentTarget = null;
 }
+Game.Defender.AI.prototype = Object.create(Game.Player.prototype);
 
-Game.Defender.AI.prototype = Object.create(Game.Defender.prototype);
-
-Game.Defender.AI.prototype.setEngine = function(engine) {
-	if (this._interval) { 
-		clearInterval(this._interval); 
-		this._interval = null;
-	}
-	Game.Defender.prototype.setEngine.call(this, engine);
-	if (this._engine) { 
-		this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_DEFENDER);
-	}
+Game.Defender.AI.prototype.destroy = function() {
+	clearInterval(this._interval); 
+	this._interval = null;
+	Game.Player.prototype.destroy.call(this);
 }
 
 Game.Defender.AI.prototype._poll = function() {

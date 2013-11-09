@@ -1,19 +1,14 @@
-Game.Attacker.Random = function() {
-	Game.Attacker.call(this);
-	this._interval = null;
+Game.Attacker.Random = function(engine) {
+	Game.Player.call(this, engine);
+	this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_ATTACKER);
 }
 
-Game.Attacker.Random.prototype = Object.create(Game.Attacker.prototype);
+Game.Attacker.Random.prototype = Object.create(Game.Player.prototype);
 
-Game.Attacker.Random.prototype.setEngine = function(engine) {
-	if (this._interval) { 
-		clearInterval(this._interval); 
-		this._interval = null;
-	}
-	Game.Attacker.prototype.setEngine.call(this, engine);
-	if (this._engine) { 
-		this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_ATTACKER);
-	}
+Game.Attacker.Random.prototype.destroy = function() {
+	clearInterval(this._interval); 
+	this._interval = null;
+	Game.Player.prototype.destroy.call(this);
 }
 
 Game.Attacker.Random.prototype._poll = function() {

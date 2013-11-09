@@ -1,29 +1,22 @@
-Game.Attacker.AI = function() {
-	Game.Attacker.call(this);
-	this._interval = null;
+Game.Attacker.AI = function(engine) {
+	Game.Attacker.call(this, engine);
 	this._lastType = "";
+	this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_ATTACKER);
 }
 
-Game.Attacker.AI.prototype = Object.create(Game.Attacker.prototype);
+Game.Attacker.AI.prototype = Object.create(Game.Player.prototype);
 
-Game.Attacker.AI.prototype.setEngine = function(engine) {
-	if (this._interval) { 
-		clearInterval(this._interval); 
-		this._interval = null;
-	}
-	Game.Attacker.prototype.setEngine.call(this, engine);
-	if (this._engine) { 
-		this._interval = setInterval(this._poll.bind(this), Game.INTERVAL_ATTACKER);
-	}
+Game.Attacker.AI.prototype.destroy = function() {
+	clearInterval(this._interval); 
+	this._interval = null;
+	Game.Player.prototype.destroy.call(this);
 }
 
 Game.Attacker.AI.prototype._poll = function() {
 	var next = this._engine.getNextPiece();
 	if (next) { return; }
 
-	var money = this._engine.getStatus().money;
-	var avail = Game.Piece.getAvailableTypes(money);
-	if (!avail.length) { return; } /* out of money */
+	var avail = Object.keys(this._engine.getAvailableTypes());
 
 	/* remove last used type, if possible */
 	var index = avail.indexOf(this._lastType);

@@ -2,6 +2,7 @@ Game.Gallery = function(engine) {
 	this._engine = engine;
 
 	this.pieces = {};
+	this.amounts = {};
 	this.node = null;
 
 	this._build();
@@ -11,8 +12,8 @@ Game.Gallery.prototype.sync = function() {
 	var nextType = null;
 	var nextPiece = this._engine.getNextPiece();
 	if (nextPiece) { nextType = nextPiece.type; }
-
-	var money = this._engine.getStatus().money;
+	
+	var avail = this._engine.getAvailableTypes();
 
 	for (var type in this.pieces) {
 		var piece = this.pieces[type];
@@ -21,11 +22,14 @@ Game.Gallery.prototype.sync = function() {
 		} else {
 			piece.classList.remove("next");
 		}
-		if (Game.Piece.DEF[type].price > money) {
-			piece.classList.add("disabled");
-		} else {
+		
+		if (avail[type]) {
 			piece.classList.remove("disabled");
+		} else {
+			piece.classList.add("disabled");
 		}
+		
+		this.amounts[type].innerHTML = avail[type] || 0;
 	}
 }
 
@@ -58,7 +62,12 @@ Game.Gallery.prototype._buildPiece = function(type, index) {
 	
 	var num = index+1;
 	if (num == 10) { num = 0; }
-	var text = "(" + (num) + ") Price: " + Game.Piece.DEF[type].price;
+	var text = "(" + (num) + ") Available: ";
 	node.appendChild(document.createTextNode(text));
+	
+	var amount = document.createElement("span");
+	this.amounts[type] = amount;
+	node.appendChild(amount);
+	
 	this.node.appendChild(node);
 }

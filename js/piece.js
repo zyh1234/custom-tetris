@@ -4,7 +4,6 @@ Game.Piece = function(type) {
 
 	this.type = type;
 	this.xy = new XY();
-	this.price = def.price;
 	this.node = null;
 	this.cells = {};
 
@@ -16,67 +15,56 @@ Game.Piece = function(type) {
 
 Game.Piece.DEF = {
 	"o": {
-		color: "#999",
-		price: 100,
+		color: "#333",
+		avail: 3,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(-1, -1)]
 	},
 	"i": {
 		color: "#6cf",
-		price: 50,
+		avail: 3,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-2, 0)]
 	},
 	"s": {
 		color: "#6c0",
-		price: 200,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(1, 0), new XY(0, -1), new XY(-1, -1)]
 	},
 	"z": {
 		color: "#ff3",
-		price: 200,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(0, -1), new XY(1, -1)]
 	},
 	"l": {
 		color: "#f93",
-		price: 150,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(-1, -1)]
 	},
 	"j": {
 		color: "#939",
-		price: 150,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(1, -1)]
 	},
 	"t": {
 		color: "#c33",
-		price: 100,
+		avail: 3,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1)]
 	},
 /***/
 	"-": {
 		color: "#fff",
-		price: 20,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(-1, 0)]
 	},
 	"+": {
 		color: "#f9c",
-		price: 300,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1), new XY(0, 1)]
 	},
 	"u": {
 		color: "#c93",
-		price: 300,
+		avail: 2,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(-1, 1), new XY(1, 0), new XY(1, -1)]
 	}
-}
-
-/**
- * Return all types that are available for a given price
- */
-Game.Piece.getAvailableTypes = function(price) {
-	var result = [];
-	for (var type in this.DEF) {
-		if (this.DEF[type].price <= price) { result.push(type); }
-	}
-	return result;
 }
 
 Object.defineProperty(Game.Piece.prototype, "xy", {

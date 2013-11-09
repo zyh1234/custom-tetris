@@ -1,18 +1,44 @@
 html, body {
 	margin: 0;
 	height: 100%;
+	background-color: #666;
+	color: #fff;
+	text-shadow: 1px 1px 2px #000;
 }
 
 #left, #right {
 	width: 50%;
 	height: 100%;
 	float: left;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#left {
+	border-right: 2px solid #000;
+}
+
+#right {
+	border-left: 2px solid #000;
+}
+
+#info {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
+	border: 4px solid #000;
+	border-top: none;
+	text-align: center;
+	width: 200px;
+	border-radius: 0 0 30px 30px;
 }
 
 .pit {
-	background-color: #aaa;
 	position: relative;
 	overflow: hidden;
+	border: 3px solid #000;
+	margin: auto;
 }
 
 .piece {
