@@ -35,8 +35,14 @@
 			trying to position blocks correctly and remaining alive as long as possible. This version 
 			allows you to customize <strong>both</strong> roles: defending (as a human or AI) and attacking (picking blocks as a human, AI or randomly).</p>
 			<p>All of these possibilities can be used in a networked multiplayer game as well!</p>
+			<a href="#" id="play">Play!</a>
+			<div id="mode"><span>Game mode: </span><select>
+				<option value="local">Local</option>
+				<option value="network">Network</option>
+			</select>
+			</div>
 			<div id="attacker">
-				Attacker: <select>
+				<span>Attacker: </span><select>
 					<option value="Human">Human</option>
 					<option value="AI">AI</option>
 					<option value="Random">Random</option>
@@ -44,13 +50,13 @@
 				</select>
 			</div>
 			<div id="defender">
-				Defender: <select>
+				<span>Defender: </span><select>
 					<option value="Human">Human</option>
 					<option value="AI">AI</option>
 					<option value="Remote">Remote</option>
 				</select>
 			</div>
-			<div id="play"></div>
+			<div id="description"></div>
 		</div>
 		<script>new Game.App();</script>
 	</body>

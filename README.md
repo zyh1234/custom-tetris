@@ -5,7 +5,6 @@ Play the classic Tetris game **the way you like it!** Adjust the rules, *change*
 ## Instructions
 
 * Make sure you have a `README` file that includes a brief description of your game, what open source projects (if any) you used, and a screenshot.
-* Your repository should have a brief description and the playable URL entered into the fields shown below (this will make our judging process easier):
 
 ## DevLog
 
@@ -17,3 +16,4 @@ Play the classic Tetris game **the way you like it!** Adjust the rules, *change*
 * Day 7: bugfixing async issues, basic set of pieces, readonly gallery
 * Day 8: human (working) and ai (unusable) attackers, bonus pieces
 * Day 9: refactored attacker rules, UI tuning, Game.App draft
+* Day 10: setup texts and UI
