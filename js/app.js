@@ -11,7 +11,7 @@ Game.App = function() {
 	this._select.attacker.addEventListener("change", this);
 	this._select.defender.addEventListener("change", this);
 
-	this._start();
+//	this._start();
 }
 
 Game.App.prototype.handleEvent = function(e) {
@@ -22,7 +22,8 @@ Game.App.prototype.handleEvent = function(e) {
 	}
 }
 
-Game.App.prototype._start = function(attacker, defender) {
+Game.App.prototype._start = function() {
+	document.querySelector("#setup").classList.add("playing");
 	if (this._engine) { this._engine.destroy(); }
 	
 	document.querySelector("#left").appendChild(document.querySelector("#defender"));

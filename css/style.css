@@ -11,6 +11,10 @@ html, body {
 	font-family: lato;
 }
 
+h1 {
+	text-align: center;
+}
+
 #left, #right {
 	width: 50%;
 	height: 100%;
@@ -21,7 +25,7 @@ html, body {
 }
 
 #left {
-	padding-top: 6em;
+	padding-top: 4em;
 	border-right: 2px solid #ccc;
 }
 
@@ -51,6 +55,24 @@ html, body {
 
 #status {
 	color: #f66;
+}
+
+#setup {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition: all 0.5s;
+	background-color: rgba(60, 60, 60, 0.9);
+	padding: 0 20%;
+	font-size: 130%;
+}
+
+#setup.playing {
+	transform: translate(0, -100%);
 }
 
 .pit {

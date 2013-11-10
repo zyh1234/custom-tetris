@@ -29,6 +29,12 @@
 			<p>Status: <span id="status"></span></p>
 		</div>
 		<div id="setup">
+			<h1>Custom Tetris</h1>
+			<p>Change the way Tetris is played!</p>
+			<p>In a traditional Tetris setup, you play as a <em>defender</em>, 
+			trying to position blocks correctly and remaining alive as long as possible. This version 
+			allows you to customize <strong>both</strong> roles: defending (as a human or AI) and attacking (picking blocks as a human, AI or randomly).</p>
+			<p>All of these possibilities can be used in a networked multiplayer game as well!</p>
 			<div id="attacker">
 				Attacker: <select>
 					<option value="Human">Human</option>
@@ -44,6 +50,7 @@
 					<option value="Remote">Remote</option>
 				</select>
 			</div>
+			<div id="play"></div>
 		</div>
 		<script>new Game.App();</script>
 	</body>
