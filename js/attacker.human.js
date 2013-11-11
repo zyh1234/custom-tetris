@@ -22,7 +22,7 @@ Game.Attacker.Human.prototype.handleEvent = function(e) {
 				if (node.hasAttribute("data-type")) { type = node.getAttribute("data-type"); }
 				node = node.parentNode;
 			}
-			if (type) { this._tryType(type); }
+			if (type) { this._engine.setNextType(type); }
 		break;
 		
 		case "keydown":
@@ -31,13 +31,7 @@ Game.Attacker.Human.prototype.handleEvent = function(e) {
 			var def = Object.keys(Game.Piece.DEF);
 			var type = def[index];
 			var avail = this._engine.getAvailableTypes();
-			if (avail[type]) { this._tryType(type); }
+			if (avail[type]) { this._engine.setNextType(type); }
 		break;
 	}
-}
-
-Game.Attacker.Human.prototype._tryType = function(type) {
-	var status = this._engine.getStatus();
-	var piece = new Game.Piece(type);
-	this._engine.setNextPiece(piece);
 }

@@ -3,12 +3,13 @@ Game.Engine = function() {
 		score: 0,
 		playing: true
 	}
-	this._setScore(0);
-	this._setPlaying(true);
 
 	this._interval = null;
 	this._dropping = false;
 	this._availableTypes = {};
+
+	this._setScore(0);
+	this._setPlaying(true);
 
 	this.gallery = new Game.Gallery(this);
 	this.pit = new Game.Pit();
@@ -18,19 +19,18 @@ Game.Engine = function() {
 	document.querySelector("#right").appendChild(this.gallery.node);
 	
 	this._piece = null;
-	this._nextPiece = null;
+	this._nextType = "";
 	this._refreshAvailable();
 	this.gallery.sync();
 }
 
-Game.Engine.prototype.setNextPiece = function(nextPiece) {
-	var type = nextPiece.type;
-	var avail = this._availableTypes[type] || 0;
+Game.Engine.prototype.setNextType = function(nextType) {
+	var avail = this._availableTypes[nextType] || 0;
 	if (avail < 1) { return; }
 
-	this._nextPiece = nextPiece;
+	this._nextType = nextType;
 	if (!this._piece) { 
-		this._useNextPiece(); 
+		this._useNextType(); 
 	} else {
 		this.gallery.sync();
 	}
@@ -49,8 +49,8 @@ Game.Engine.prototype.getStatus = function() {
 	return this._status;
 }
 
-Game.Engine.prototype.getNextPiece = function() {
-	return this._nextPiece;
+Game.Engine.prototype.getNextType = function() {
+	return this._nextType;
 }
 
 Game.Engine.prototype.drop = function() {
@@ -91,7 +91,7 @@ Game.Engine.prototype._drop = function() {
 	var removed = this.pit.drop(this._piece);
 	this._piece = null;
 	this._setScore(this._status.score + this._computeScore(removed));
-	if (this._nextPiece) { this._useNextPiece(); }
+	if (this._nextType) { this._useNextType(); }
 }
 
 
@@ -101,22 +101,22 @@ Game.Engine.prototype._refreshAvailable = function() {
 	}
 }
 
-Game.Engine.prototype._useNextPiece = function() {
-	var type = this._nextPiece.type;
-	var avail = this._availableTypes[type]-1;
+Game.Engine.prototype._useNextType = function() {
+	var avail = this._availableTypes[this._nextType]-1;
 	if (avail) {
-		this._availableTypes[type] = avail;
+		this._availableTypes[this._nextType] = avail;
 	} else {
-		delete this._availableTypes[type];
+		delete this._availableTypes[this._nextType];
 	}
 	if (!Object.keys(this._availableTypes).length) { this._refreshAvailable(); }
 	
-	this._nextPiece.center();
-	this._nextPiece.build(this.pit.node);
+	var nextPiece = new Game.Piece(this._nextType);
+	nextPiece.center();
+	nextPiece.build(this.pit.node);
 
-	if (this._nextPiece.fits(this.pit)) {
-		this._piece = this._nextPiece;
-		this._nextPiece = null;
+	if (nextPiece.fits(this.pit)) {
+		this._piece = nextPiece;
+		this._nextType = null;
 		this._start();
 	} else { /* game over */
 		this._setPlaying(false);

@@ -9,9 +9,7 @@ Game.Gallery = function(engine) {
 }
 
 Game.Gallery.prototype.sync = function() {
-	var nextType = null;
-	var nextPiece = this._engine.getNextPiece();
-	if (nextPiece) { nextType = nextPiece.type; }
+	var nextType = this._engine.getNextType();
 	
 	var avail = this._engine.getAvailableTypes();
 

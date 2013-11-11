@@ -12,11 +12,9 @@ Game.Attacker.Random.prototype.destroy = function() {
 }
 
 Game.Attacker.Random.prototype._poll = function() {
-	var next = this._engine.getNextPiece();
+	var next = this._engine.getNextType();
 	if (next) { return; }
 
 	var type = Object.keys(Game.Piece.DEF).random();
-
-	var piece = new Game.Piece(type);
-	this._engine.setNextPiece(piece);
+	this._engine.setNextType(type);
 }

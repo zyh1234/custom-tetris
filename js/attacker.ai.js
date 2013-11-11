@@ -13,7 +13,7 @@ Game.Attacker.AI.prototype.destroy = function() {
 }
 
 Game.Attacker.AI.prototype._poll = function() {
-	var next = this._engine.getNextPiece();
+	var next = this._engine.getNextType();
 	if (next) { return; }
 
 	var avail = Object.keys(this._engine.getAvailableTypes());
@@ -49,7 +49,6 @@ Game.Attacker.AI.prototype._poll = function() {
 	}
 
 	var type = worstTypes.random();
-	var piece = new Game.Piece(type);
 	this._lastType = type;
-	this._engine.setNextPiece(piece);
+	this._engine.setNextType(type);
 }

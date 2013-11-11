@@ -5,23 +5,11 @@ Game.Engine.Network = function(firebase) {
 }
 Game.Engine.Network.prototype = Object.create(Game.Engine.prototype);
 
-Game.Engine.Network.prototype._change = function(snap) {
-	var data = snap.val();
-	if (!data) { return; }
-
-	if ("pit" in data) { this._syncPit(data.pit) }
-	if ("avail" in data) { this._syncAvailablePieces(data.avail); }
-	if ("piece" in data) { this._syncPiece(data.piece); }
-	if ("nextPiece" in data) { this._syncNextPiece(data.next); }
-	if ("drop" in data) { this._syncDrop(data.drop); }
-	if ("status" in data) { this._syncStatus(data.status); }
-}
-
-Game.Engine.Network.prototype.setNextPiece = function(nextPiece, doNotSend) {
-	Game.Engine.prototype.setNextPiece.call(this, nextPiece);	
+Game.Engine.Network.prototype.setNextType = function(nextType, doNotSend) {
+	Game.Engine.prototype.setNextType.call(this, nextType);	
 	if (doNotSend) { return this; }
 
-	if (this._nextPiece) { /* waiting, propagate upwards */
+	if (this._nextType) { /* waiting, propagate upwards */
 		this._send("next", "avail");
 	} else { /* next piece got transformed into piece */
 		this._send("next", "piece", "avail");
@@ -29,15 +17,9 @@ Game.Engine.Network.prototype.setNextPiece = function(nextPiece, doNotSend) {
 }
 
 Game.Engine.Network.prototype.drop = function(doNotSend) {
-	if (!this._piece || this._dropping) { return; }
-
-	if (!doNotSend) { /* send with OLD piece position so the remote side gets correct piece pos */
-		this._dropping = true; /* fake this for correct "drop" value */
-		this._send("piece", "drop");
-		this._dropping = false;
-	}
-
-	Game.Engine.prototype.drop.call(this);	
+	Game.Engine.prototype.drop.call(this);
+	
+	this._send("piece");
 	return this;
 }
 
@@ -55,8 +37,25 @@ Game.Engine.Network.prototype.shift = function(direction) {
 
 Game.Engine.Network.prototype._drop = function() {
 	Game.Engine.prototype._drop.call(this);
-	this._send("pit", "piece", "next", "avail", "drop", "status");
+	this._send("pit", "piece", "next", "avail", "status");
 }
+
+Game.Engine.Network.prototype._tick = function() {
+	Game.Engine.prototype._tick.call(this);
+	if (!this._dropping) { this._send("piece"); }
+}
+
+Game.Engine.Network.prototype._change = function(snap) {
+	var data = snap.val();
+	if (!data) { return; }
+
+	if ("pit" in data) { this._syncPit(data.pit) }
+	if ("avail" in data) { this._syncAvailablePieces(data.avail); }
+	if ("piece" in data) { this._syncPiece(data.piece); }
+	if ("next" in data) { this._syncNextType(data.next); }
+	if ("status" in data) { this._syncStatus(data.status); }
+}
+
 
 Game.Engine.Network.prototype._send = function() {
 	var data = {};
@@ -66,16 +65,12 @@ Game.Engine.Network.prototype._send = function() {
 				data.pit = this.pit.toJSON();
 			break;
 
-			case "drop":
-				data.drop = this._dropping;
-			break;
-
 			case "piece":
 				data.piece = (this._piece ? this._piece.toJSON() : null);
 			break;
 
 			case "next":
-				data.next = (this._nextPiece ? this._nextPiece.toJSON() : null);
+				data.next = this._nextType;
 			break;
 
 			case "avail":
@@ -115,23 +110,14 @@ Game.Engine.Network.prototype._syncPiece = function(remotePiece) {
 	}
 }
 
-Game.Engine.Network.prototype._syncNextPiece = function(remoteNextPiece) {
-	if (remoteNextPiece) {
-		var piece = new Game.Piece(remoteNextPiece);
-		this.setNextPiece(piece, true);
+Game.Engine.Network.prototype._syncNextType = function(remoteNextType) {
+	if (remoteNextType) {
+		var piece = new Game.Piece(remoteNextType);
+		this.setNextType(piece, true);
 	} else {
-		this._nextPiece = null;
+		this._nextType = "";
 	}
 	this.gallery.sync();
-}
-
-Game.Engine.Network.prototype._syncDrop = function(remoteDrop) {
-	if (remoteDrop == this._dropping) { return; }
-	if (remoteDrop) { /* remote side started dropping */
-		this.drop(true);
-	} else { /* remote side ended dropping, ignore (we will do this ourselves) */
-
-	}
 }
 
 Game.Engine.Network.prototype._syncStatus = function(remoteStatus) {
