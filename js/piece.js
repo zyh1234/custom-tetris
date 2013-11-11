@@ -8,7 +8,7 @@ Game.Piece = function(type) {
 	this.cells = {};
 
 	def.cells.forEach(function(xy) {
-		var cell = new Game.Cell(xy, def.color);
+		var cell = new Game.Cell(xy, type);
 		this.cells[xy] = cell;
 	}, this);
 }
@@ -61,7 +61,7 @@ Game.Piece.DEF = {
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(1, 0), new XY(0, -1), new XY(0, 1)]
 	},
 	"u": {
-		color: "#c93",
+		color: "#963",
 		avail: 1,
 		cells: [new XY(0, 0), new XY(-1, 0), new XY(-1, 1), new XY(1, 0), new XY(1, -1)]
 	}
@@ -83,6 +83,35 @@ Game.Piece.prototype.toString = function() {
 	return Object.keys(this.cells).join(";");
 }
 
+Game.Piece.prototype.toJSON = function() {
+	var data = {
+		type: this.type,
+		xy: this.xy.toString(),
+		cells: {}
+	};
+	for (var p in this.cells) { data.cells[p] = 1; }
+	return data;
+}
+
+Game.Piece.prototype.fromJSON = function(data) {
+	var reused = {};
+	for (var p in data.cells) {
+		if (p in this.cells) { continue; }
+		var cell = new Game.Cell(XY.fromString(p), this.type);
+		this.cells[p] = cell;
+		if (this.node) { cell.build(this.node); }
+	}
+	for (var p in this.cells) {
+		if (p in data.cells) { continue; }
+		if (this.node) { this.node.removeChild(this.cells[p].node); }
+		delete this.cells[p];
+	}
+	this.xy = XY.fromString(data.xy);
+}
+
+Game.Piece.prototype.destroy = function() {
+	if (this.node) { this.node.parentNode.removeChild(this.node); }
+}
 
 Game.Piece.prototype.build = function(parent) {
 	this.node = document.createElement("div");

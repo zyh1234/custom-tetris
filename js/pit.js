@@ -25,6 +25,35 @@ Game.Pit.prototype.build = function() {
 	return this;
 }
 
+Game.Pit.prototype.toJSON = function() {
+	var data = {
+		cols: this.cols,
+		rows: this.rows,
+		cells: {}
+	};
+	for (var p in this.cells) {
+		data.cells[p] = this.cells[p].type;
+	}
+	return data;
+}
+
+Game.Pit.prototype.fromJSON = function(data) {
+	this.cols = data.cols;
+	this.rows = data.rows;
+	var reused = {};
+	for (var p in data.cells) {
+		if (p in this.cells) { continue; }
+		var cell = new Game.Cell(XY.fromString(p), data.cells[p]);
+		this.cells[p] = cell;
+		if (this.node) { cell.build(this.node); }
+	}
+	for (var p in this.cells) {
+		if (p in data.cells) { continue; }
+		if (this.node) { this.node.removeChild(this.cells[p].node); }
+		delete this.cells[p];
+	}
+}
+
 Game.Pit.prototype.getScore = function() {
 	var max = Math.max.apply(Math, this.cols);
 	var cells = 0;
@@ -82,8 +111,10 @@ Game.Pit.prototype.drop = function(piece) {
 		cell.xy = xy;
 		this.cells[xy] = cell;
 
-		this.rows[xy.y]++;
-		this.cols[xy.x] = Math.max(this.cols[xy.x], xy.y+1);
+		if (xy.y < Game.DEPTH) { 
+			this.rows[xy.y]++; 
+			this.cols[xy.x] = Math.max(this.cols[xy.x], xy.y+1);
+		}
 	}
 	if (this.node && piece.node) { this.node.removeChild(piece.node); }
 

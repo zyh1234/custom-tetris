@@ -1,6 +1,6 @@
-Game.Cell = function(xy, color) {
+Game.Cell = function(xy, type) {
 	this.xy = xy;
-	this._color = color;
+	this.type = type;
 	this.node = null;
 }
 
@@ -20,14 +20,14 @@ Game.Cell.prototype.build = function(parent) {
 	this.node.classList.add("cell");
 	this.node.style.width = Game.CELL + "px";
 	this.node.style.height = Game.CELL + "px";
-	this.node.style.backgroundColor = this._color;
+	this.node.style.backgroundColor = Game.Piece.DEF[this.type].color;
 	this._position();
 	parent.appendChild(this.node);
 	return this;
 }
 
 Game.Cell.prototype.clone = function() {
-	return new Game.Cell(this.xy, this._color);
+	return new Game.Cell(this.xy, this.type);
 }
 
 Game.Cell.prototype._position = function() {

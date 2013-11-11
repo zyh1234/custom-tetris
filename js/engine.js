@@ -1,14 +1,10 @@
-Game.Engine = function(options) {
-	this._options = {
-	}
-	for (var p in options) { this._options[p] = options[p]; }
-
+Game.Engine = function() {
 	this._status = {
 		score: 0,
 		playing: true
 	}
-	document.querySelector("#status").innerHTML = "Playing";
 	this._setScore(0);
+	this._setPlaying(true);
 
 	this._interval = null;
 	this._dropping = false;
@@ -27,11 +23,6 @@ Game.Engine = function(options) {
 	this.gallery.sync();
 }
 
-Game.Engine.prototype.destroy = function() {
-	document.querySelector("#left").innerHTML = "";
-	document.querySelector("#right").innerHTML = "";
-}
-
 Game.Engine.prototype.setNextPiece = function(nextPiece) {
 	var type = nextPiece.type;
 	var avail = this._availableTypes[type] || 0;
@@ -43,6 +34,7 @@ Game.Engine.prototype.setNextPiece = function(nextPiece) {
 	} else {
 		this.gallery.sync();
 	}
+	return this;
 }
 
 Game.Engine.prototype.getAvailableTypes = function() {
@@ -73,6 +65,22 @@ Game.Engine.prototype.drop = function() {
 	this._stop();
 	this._dropping = true;
 	setTimeout(this._drop.bind(this), Game.INTERVAL_DROP);
+	return this;
+}
+
+Game.Engine.prototype.rotate = function() {
+	if (!this._piece || this._dropping) { return; }
+	this._piece.rotate(+1);
+	if (!this._piece.fits(this.pit)) { this._piece.rotate(-1); }
+	return this;
+}
+
+Game.Engine.prototype.shift = function(direction) {
+	if (!this._piece || this._dropping) { return; }
+	var xy = new XY(direction, 0);
+	this._piece.xy = this._piece.xy.plus(xy);
+	if (!this._piece.fits(this.pit)) { this._piece.xy = this._piece.xy.minus(xy); }
+	return this;
 }
 
 /**
@@ -86,18 +94,6 @@ Game.Engine.prototype._drop = function() {
 	if (this._nextPiece) { this._useNextPiece(); }
 }
 
-Game.Engine.prototype.rotate = function() {
-	if (!this._piece || this._dropping) { return; }
-	this._piece.rotate(+1);
-	if (!this._piece.fits(this.pit)) { this._piece.rotate(-1); }
-}
-
-Game.Engine.prototype.shift = function(direction) {
-	if (!this._piece || this._dropping) { return; }
-	var xy = new XY(direction, 0);
-	this._piece.xy = this._piece.xy.plus(xy);
-	if (!this._piece.fits(this.pit)) { this._piece.xy = this._piece.xy.minus(xy); }
-}
 
 Game.Engine.prototype._refreshAvailable = function() {
 	for (var type in Game.Piece.DEF) {
@@ -123,8 +119,7 @@ Game.Engine.prototype._useNextPiece = function() {
 		this._nextPiece = null;
 		this._start();
 	} else { /* game over */
-		this._status.playing = false;
-		document.querySelector("#status").innerHTML = "GAME OVER";
+		this._setPlaying(false);
 	}
 
 	this.gallery.sync();
@@ -147,6 +142,11 @@ Game.Engine.prototype._tick = function() {
 Game.Engine.prototype._computeScore = function(removed) {
 	if (!removed) { return 0; }
 	return 100 * (1 << (removed-1));
+}
+
+Game.Engine.prototype._setPlaying = function(playing) {
+	this._status.playing = playing;
+	document.querySelector("#status").innerHTML = (playing ? "Playing" : "GAME OVER");
 }
 
 Game.Engine.prototype._start = function() {

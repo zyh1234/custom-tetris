@@ -6,6 +6,7 @@
 	position: absolute;
 	left: 0;
 	top: 0;
+	-webkit-transition: all 0.5s;
 	transition: all 0.5s;
 	background-color: rgba(60, 60, 60, 0.95);
 	padding: 0 20%;
@@ -17,12 +18,48 @@
 	width: 6em;
 }
 
+#play {
+	float: right;
+	font-size: 200%;
+	border-radius: 1em;
+	padding: 0.2em 0.5em;
+}
+
+#play:not([disabled]) {
+	cursor: pointer;
+}
+
 #setup.playing {
+	-webkit-transform: translate(0, -100%);
 	transform: translate(0, -100%);
 }
 
 #setup #description {
 	margin-top: 1em;
-	font-size: 80%;
 	font-variant: small-caps;
+}
+
+#setup #description strong {
+	color: #6f6;
+}
+
+#setup #network {
+	font-family: monospace;
+}
+
+#setup #connect {
+	cursor: pointer;
+}
+
+#setup #connect.connected:before {
+	color: #0f0;
+	content: "✓ ";
+}
+
+.local #setup #network, .network #setup #description {
+	display: none;
+}
+
+.local #attacker option:last-child, .local #defender option:last-child {
+	display: none;
 }

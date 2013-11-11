@@ -7,6 +7,7 @@
 		<script src="js/xy.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/engine.js"></script>
+		<script src="js/engine.network.js"></script>
 		<script src="js/pit.js"></script>
 		<script src="js/piece.js"></script>
 		<script src="js/cell.js"></script>
@@ -35,7 +36,7 @@
 			trying to position blocks correctly and remaining alive as long as possible. This version 
 			allows you to customize <strong>both</strong> roles: defending (as a human or AI) and attacking (picking blocks as a human, AI or randomly).</p>
 			<p>All of these possibilities can be used in a networked multiplayer game as well!</p>
-			<a href="#" id="play">Play!</a>
+			<button id="play">Play!</button>
 			<div id="mode"><span>Game mode: </span><select>
 				<option value="local">Local</option>
 				<option value="network">Network</option>
@@ -56,8 +57,10 @@
 					<option value="Remote">Remote</option>
 				</select>
 			</div>
-			<div id="description"></div>
+			<p id="description"></p>
+			<p id="network"><button id="connect">Connect</button> https://<input type="text" id="server" size="8"/>.firebaseio.com/tetris/<input type="text" id="slug" size="5" /></p>
 		</div>
 		<script>new Game.App();</script>
+		<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
 	</body>
 </html>

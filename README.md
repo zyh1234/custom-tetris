@@ -17,3 +17,4 @@ Play the classic Tetris game **the way you like it!** Adjust the rules, *change*
 * Day 8: human (working) and ai (unusable) attackers, bonus pieces
 * Day 9: refactored attacker rules, UI tuning, Game.App draft
 * Day 10: setup texts and UI
+* Day 11: finalizing setup UI, basic network experiments

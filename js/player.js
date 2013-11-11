@@ -4,3 +4,5 @@ Game.Player = function(engine) {
 
 Game.Player.prototype.destroy = function() {
 }
+
+Game.Attacker.Remote = Game.Defender.Remote = Game.Player;
