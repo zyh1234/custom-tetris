@@ -16,9 +16,8 @@ Game.Engine.Network.prototype.setNextType = function(nextType, doNotSend) {
 	}
 }
 
-Game.Engine.Network.prototype.drop = function(doNotSend) {
+Game.Engine.Network.prototype.drop = function() {
 	Game.Engine.prototype.drop.call(this);
-	
 	this._send("piece");
 	return this;
 }
@@ -97,10 +96,13 @@ Game.Engine.Network.prototype._syncAvailablePieces = function(remoteAvail) {
 Game.Engine.Network.prototype._syncPiece = function(remotePiece) {
 	if (remotePiece) {
 		if (!this._piece) {
-			var piece = new Game.Piece(remotePiece.type);
-			this._piece = piece;
+			this._piece = new Game.Piece(remotePiece.type);
 			this._piece.build(this.pit.node);
 			this._start();
+		} else if (this._piece.id != remotePiece.id) {
+			this._piece.destroy();
+			this._piece = new Game.Piece(remotePiece.type);
+			this._piece.build(this.pit.node);
 		}
 		this._piece.fromJSON(remotePiece);
 	} else if (this._piece) {
@@ -111,9 +113,9 @@ Game.Engine.Network.prototype._syncPiece = function(remotePiece) {
 }
 
 Game.Engine.Network.prototype._syncNextType = function(remoteNextType) {
+	console.log("syncNextType", remoteNextType);
 	if (remoteNextType) {
-		var piece = new Game.Piece(remoteNextType);
-		this.setNextType(piece, true);
+		this.setNextType(remoteNextType, true);
 	} else {
 		this._nextType = "";
 	}

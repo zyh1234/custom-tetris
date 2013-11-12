@@ -40,7 +40,6 @@ Game.Pit.prototype.toJSON = function() {
 Game.Pit.prototype.fromJSON = function(data) {
 	this.cols = data.cols;
 	this.rows = data.rows;
-	var reused = {};
 	for (var p in data.cells) {
 		if (p in this.cells) { continue; }
 		var cell = new Game.Cell(XY.fromString(p), data.cells[p]);

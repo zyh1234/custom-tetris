@@ -6,6 +6,7 @@ Game.Piece = function(type) {
 	this.xy = new XY();
 	this.node = null;
 	this.cells = {};
+	this.id = Math.random();
 
 	def.cells.forEach(function(xy) {
 		var cell = new Game.Cell(xy, type);
@@ -87,6 +88,7 @@ Game.Piece.prototype.toJSON = function() {
 	var data = {
 		type: this.type,
 		xy: this.xy.toString(),
+		id: this.id,
 		cells: {}
 	};
 	for (var p in this.cells) { data.cells[p] = 1; }
@@ -94,7 +96,6 @@ Game.Piece.prototype.toJSON = function() {
 }
 
 Game.Piece.prototype.fromJSON = function(data) {
-	var reused = {};
 	for (var p in data.cells) {
 		if (p in this.cells) { continue; }
 		var cell = new Game.Cell(XY.fromString(p), this.type);

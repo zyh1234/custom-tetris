@@ -116,7 +116,7 @@ Game.Engine.prototype._useNextType = function() {
 
 	if (nextPiece.fits(this.pit)) {
 		this._piece = nextPiece;
-		this._nextType = null;
+		this._nextType = "";
 		this._start();
 	} else { /* game over */
 		this._setPlaying(false);
