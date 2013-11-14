@@ -206,5 +206,10 @@ Game.App.prototype._createBackground = function() {
 	piece.rotate(1);
 	piece.xy = new XY(8, 0);
 	piece.build(this._dom.setup);
+
+	var piece = new Game.Piece("-");
+	piece.rotate(1);
+	piece.xy = new XY(1, 5);
+	piece.build(this._dom.setup);
 }
 

@@ -31,10 +31,7 @@ Game.Attacker.Human.prototype.handleEvent = function(e) {
 			var def = Object.keys(Game.Piece.DEF);
 			var type = def[index];
 			var avail = this._engine.getAvailableTypes();
-			if (avail[type]) { 
-				e.preventDefault();
-				this._engine.setNextType(type);
-			}
+			if (avail[type]) { this._engine.setNextType(type); }
 		break;
 	}
 }
