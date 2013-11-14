@@ -5,9 +5,8 @@ Game.Engine.Network = function(firebase) {
 }
 Game.Engine.Network.prototype = Object.create(Game.Engine.prototype);
 
-Game.Engine.Network.prototype.setNextType = function(nextType, doNotSend) {
+Game.Engine.Network.prototype.setNextType = function(nextType) {
 	Game.Engine.prototype.setNextType.call(this, nextType);	
-	if (doNotSend) { return this; }
 
 	if (this._nextType) { /* waiting, propagate upwards */
 		this._send("next", "avail");
@@ -49,12 +48,11 @@ Game.Engine.Network.prototype._change = function(snap) {
 	if (!data) { return; }
 
 	if ("pit" in data) { this._syncPit(data.pit) }
-	if ("avail" in data) { this._syncAvailablePieces(data.avail); }
 	if ("piece" in data) { this._syncPiece(data.piece); }
 	if ("next" in data) { this._syncNextType(data.next); }
+	if ("avail" in data) { this._syncAvailablePieces(data.avail); }
 	if ("status" in data) { this._syncStatus(data.status); }
 }
-
 
 Game.Engine.Network.prototype._send = function() {
 	var data = {};
@@ -113,13 +111,7 @@ Game.Engine.Network.prototype._syncPiece = function(remotePiece) {
 }
 
 Game.Engine.Network.prototype._syncNextType = function(remoteNextType) {
-	console.log("syncNextType", remoteNextType);
-	if (remoteNextType) {
-		this.setNextType(remoteNextType, true);
-	} else {
-		this._nextType = "";
-	}
-	this.gallery.sync();
+	this._nextType = remoteNextType;
 }
 
 Game.Engine.Network.prototype._syncStatus = function(remoteStatus) {

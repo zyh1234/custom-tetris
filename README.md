@@ -18,3 +18,4 @@ Play the classic Tetris game **the way you like it!** Adjust the rules, *change*
 * Day 9: refactored attacker rules, UI tuning, Game.App draft
 * Day 10: setup texts and UI
 * Day 11: finalizing setup UI, basic network experiments
+* Days 12 to 13: tuning network synchronization

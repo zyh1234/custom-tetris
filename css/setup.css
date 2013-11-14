@@ -63,3 +63,14 @@
 .local #attacker option:last-child, .local #defender option:last-child {
 	display: none;
 }
+
+footer {
+	position: absolute;
+	bottom: 2px;
+	right: 2px;
+	font-size: 80%;
+}
+
+footer a {
+	color: #fff;
+}
