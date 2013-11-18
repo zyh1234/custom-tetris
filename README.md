@@ -19,3 +19,5 @@ Play the classic Tetris game **the way you like it!** Adjust the rules, *change*
 * Day 10: setup texts and UI
 * Day 11: finalizing setup UI, basic network experiments
 * Days 12 to 13: tuning network synchronization
+* Days 14 to 17: idle, frustrated by poor networking experience
+* Day 18: refactoring networking code

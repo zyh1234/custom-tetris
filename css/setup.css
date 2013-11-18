@@ -13,7 +13,7 @@
 	font-size: 120%;
 }
 
-#mode span, #setup #attacker span, #setup #defender span {
+#setup #attacker span, #setup #defender span {
 	display: inline-block;
 	width: 6em;
 }
@@ -36,11 +36,11 @@
 
 #setup #description {
 	margin-top: 1em;
-	font-variant: small-caps;
 }
 
 #setup #description strong {
 	color: #6f6;
+	font-variant: small-caps;
 }
 
 #setup #network {
@@ -56,11 +56,7 @@
 	content: "✓ ";
 }
 
-.local #setup #network, .network #setup #description {
-	display: none;
-}
-
-.local #attacker option:last-child, .local #defender option:last-child {
+.local #setup #network {
 	display: none;
 }
 

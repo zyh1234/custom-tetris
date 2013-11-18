@@ -12,7 +12,6 @@ Game.App = function() {
 		defender: document.querySelector("#defender"),
 		play: document.querySelector("#play"),
 		setup: document.querySelector("#setup"),
-		mode: document.querySelector("#mode"),
 		description: document.querySelector("#description"),
 		connect: document.querySelector("#connect"),
 		server: document.querySelector("#server"),
@@ -20,12 +19,10 @@ Game.App = function() {
 	}
 	this._select = {
 		attacker: this._dom.attacker.querySelector("select"),
-		defender: this._dom.defender.querySelector("select"),
-		mode: this._dom.mode.querySelector("select")
+		defender: this._dom.defender.querySelector("select")
 	}
 
 	this._dom.server.value = localStorage.getItem("tetris.server") || "ondras";
-	this._select.mode.value = localStorage.getItem("tetris.mode") || "local";
 	var slug = "";
 	for (var i=0;i<3;i++) {
 		var min = "a".charCodeAt(0);
@@ -34,13 +31,14 @@ Game.App = function() {
 		slug += String.fromCharCode(r);
 	}
 	this._dom.slug.value = localStorage.getItem("tetris.slug") || slug;
-	this._updateMode();
+	this._select.attacker.value = localStorage.getItem("tetris.attacker") || "Random";
+	this._select.defender.value = localStorage.getItem("tetris.defender") || "AI";
 
+	this._updateMode();
 	this._updateDescription();
 
 	this._select.attacker.addEventListener("change", this);
 	this._select.defender.addEventListener("change", this);
-	this._select.mode.addEventListener("change", this);
 
 	this._createBackground();
 	
@@ -52,12 +50,7 @@ Game.App = function() {
 Game.App.prototype.handleEvent = function(e) {
 	switch (e.type) {
 		case "change":
-			if (e.target == this._select.mode) {
-				localStorage.setItem("tetris.mode", this._select.mode.value);
-				this._updateMode();
-			} else {
-				this._changePlayer(e);
-			}
+			this._changePlayer(e);
 		break;
 		
 		case "click":
@@ -85,61 +78,66 @@ Game.App.prototype._connect = function() {
 	this._firebase = new Firebase(url);
 	this._firebase.once("value", function(snap) {
 		this._connected = true;
-		this._firebase.set(null);
 		this._dom.connect.classList.add("connected");
 		this._updateMode();
 	}.bind(this));
 }
 
 Game.App.prototype._changePlayer = function(e) {
-	localStorage.setItem("tetris." + this._select.mode.value + ".attacker", this._select.attacker.value);
-	localStorage.setItem("tetris." + this._select.mode.value + ".defender", this._select.defender.value);
+	if (this._engine) { /* sanity check to prevent some major changes during gameplay */
+		var types = ["attacker", "defender"];
+		for (var i=0;i<types.length;i++) {
+			var type = types[i];
+			var oldValue = localStorage.getItem("tetris." + type);
+			var newValue = this._select[type].value;
+			if (oldValue == newValue) { continue; }
+
+			if (oldValue == "Network" || newValue == "Network") { /* forbidden */
+				this._select[type].value = oldValue;
+				return;
+			}
+		}
+
+	}
+
+	localStorage.setItem("tetris.attacker", this._select.attacker.value);
+	localStorage.setItem("tetris.defender", this._select.defender.value);
 
 	if (this._engine) {
 		if (e.target == this._select.attacker) { this._createAttacker(e.target.value); }
 		if (e.target == this._select.defender) { this._createDefender(e.target.value); }
 	} else {
+		this._updateMode();
 		this._updateDescription();
 	}
 }
 
 Game.App.prototype._updateMode = function() {
-	this._select.attacker.value = localStorage.getItem("tetris." + this._select.mode.value + ".attacker") || "Random";
-	this._select.defender.value = localStorage.getItem("tetris." + this._select.mode.value + ".defender") || "AI";
+	var mode = this._getMode();
+	document.body.className = mode;
+	this._dom.play.disabled = (mode == "network" && !this._connected);
+}
 
-	document.body.className = this._select.mode.value;
-	this._dom.play.disabled = (this._select.mode.value == "network" && !this._connected);
-
-	this._updateDescription();
+Game.App.prototype._getMode = function() {
+	return (this._select.attacker.value == "Network" || this._select.defender.value == "Network" ? "network" : "local");
 }
 
 Game.App.prototype._updateDescription = function() {
 	var str = "";
 	var key = this._select.attacker.value + "-" + this._select.defender.value;
 	switch (key) {
-		case "Random-Human":
-			str = "The Classic Tetris";
-		break;
-
-		case "Random-AI":
-			str = "Sit and watch";
-		break;
-
-		case "AI-Human":
-			str = "Bastet (Bastard Tetris)";
-		break;
-
-		case "AI-AI":
-			str = "Clash of the Titans";
-		break;
-
-		case "Human-Human":
-			str = "Local multiplayer";
-		break;
-
-		case "Human-AI":
-			str = "Revenge!";
-		break;
+		case "Random-Human": str = "The Classic Tetris"; break;
+		case "Random-AI": str = "Sit and watch"; break;
+		case "Random-Network": str = "Sleeping on the job"; break;
+		case "AI-Human": str = "Bastet (Bastard Tetris)"; break;
+		case "AI-AI": str = "Clash of the Titans"; break;
+		case "AI-Network": str = "Playing Judas"; break;
+		case "Human-Human": str = "Local multiplayer"; break;
+		case "Human-AI": str = "Revenge!"; break;
+		case "Human-Network": str = "Multiplayer (attacker)"; break;
+		case "Network-Human": str = "Multiplayer (defender)"; break;
+		case "Network-AI": str = "The Mechanical Turk"; break;
+		case "Network-Network": str = "Observer mode"; break;
 	}
 
 	if (str) { str = "This configuration is known as <strong>" + str + "</strong>"; }
@@ -150,10 +148,11 @@ Game.App.prototype._start = function() {
 	this._dom.left.appendChild(this._dom.defender);
 	this._dom.right.appendChild(this._dom.attacker);
 	
-	if (this._select.mode.value == "local") {
+	if (this._getMode() == "local") {
 		this._engine = new Game.Engine();
 	} else {
-		this._engine = new Game.Engine.Network(this._firebase);
+		var master = (this._select.defender.value != "Network");
+		this._engine = new Game.Engine.Network(this._firebase, master);
 	}
 	this._createDefender(this._select.defender.value);
 	this._createAttacker(this._select.attacker.value);

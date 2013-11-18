@@ -1,6 +1,9 @@
-Game.Engine.Network = function(firebase) {
+Game.Engine.Network = function(firebase, master) {
 	this._firebase = firebase;
+	this._master = master;
 	this._firebase.on("value", this._change.bind(this));
+
+	if (this._master) { this._firebase.set(null); }
 	Game.Engine.call(this);
 }
 Game.Engine.Network.prototype = Object.create(Game.Engine.prototype);
@@ -8,50 +11,52 @@ Game.Engine.Network.prototype = Object.create(Game.Engine.prototype);
 Game.Engine.Network.prototype.setNextType = function(nextType) {
 	Game.Engine.prototype.setNextType.call(this, nextType);	
 
-	if (this._nextType) { /* waiting, propagate upwards */
-		this._send("next", "avail");
-	} else { /* next piece got transformed into piece */
-		this._send("next", "piece", "avail");
+	if (!this._master) {
+		if (this._nextType) { /* waiting, propagate upwards */
+			this._send("next", "avail");
+		} else { /* next piece got transformed into piece */
+			this._send("next", "piece", "avail");
+		}
 	}
 }
 
 Game.Engine.Network.prototype.drop = function() {
 	Game.Engine.prototype.drop.call(this);
-	this._send("piece");
+	if (this._master) { this._send("piece"); }
 	return this;
 }
 
 Game.Engine.Network.prototype.rotate = function() {
 	Game.Engine.prototype.rotate.call(this);	
-	this._send("piece");
+	if (this._master) { this._send("piece"); }
 	return this;
 }
 
 Game.Engine.Network.prototype.shift = function(direction) {
 	Game.Engine.prototype.shift.call(this, direction);	
-	this._send("piece");
+	if (this._master) { this._send("piece"); }
 	return this;
 }
 
 Game.Engine.Network.prototype._drop = function() {
 	Game.Engine.prototype._drop.call(this);
-	this._send("pit", "piece", "next", "avail", "status");
+	if (this._master) { this._send("pit", "piece", "next", "avail", "status"); }
 }
 
 Game.Engine.Network.prototype._tick = function() {
 	Game.Engine.prototype._tick.call(this);
-	if (!this._dropping) { this._send("piece"); }
+	if (this._master) { this._send("piece"); }
 }
 
 Game.Engine.Network.prototype._change = function(snap) {
 	var data = snap.val();
 	if (!data) { return; }
 
-	if ("pit" in data) { this._syncPit(data.pit) }
-	if ("piece" in data) { this._syncPiece(data.piece); }
-	if ("next" in data) { this._syncNextType(data.next); }
-	if ("avail" in data) { this._syncAvailablePieces(data.avail); }
-	if ("status" in data) { this._syncStatus(data.status); }
+	if (data.pit) { this._syncPit(data.pit); }
+	this._syncPiece(data.piece || null);
+	this._syncNextType(data.next || "");
+	if (data.avail) { this._syncAvailablePieces(data.avail); }
+	if (data.status) { this._syncStatus(data.status); }
 }
 
 Game.Engine.Network.prototype._send = function() {
@@ -117,4 +122,9 @@ Game.Engine.Network.prototype._syncNextType = function(remoteNextType) {
 Game.Engine.Network.prototype._syncStatus = function(remoteStatus) {
 	this._setScore(remoteStatus.score);
 	this._setPlaying(remoteStatus.playing)
+}
+
+Game.Engine.Network.prototype._start = function() {
+	if (!this._master) { return; }
+	Game.Engine.prototype._start.call(this);
 }
