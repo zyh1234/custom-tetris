@@ -75,7 +75,7 @@ Game.App.prototype._connect = function() {
 	localStorage.setItem("tetris.server", server);
 	localStorage.setItem("tetris.slug", slug);
 	var url = "https://" + server + ".firebaseio.com/tetris/" + slug;
-	this._firebase = new Firebase(url);
+	this._firebase = new Firebase(url); /* FIXME timeout */
 	this._firebase.once("value", function(snap) {
 		this._connected = true;
 		this._dom.connect.classList.add("connected");
@@ -140,7 +140,6 @@ Game.App.prototype._updateDescription = function() {
 		case "Network-Network": str = "Observer mode"; break;
 	}
 
-	if (str) { str = "This configuration is known as <strong>" + str + "</strong>"; }
 	this._dom.description.innerHTML = str;
 }
 
