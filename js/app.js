@@ -24,7 +24,7 @@ Game.App = function() {
 
 	this._dom.server.value = localStorage.getItem("tetris.server") || "ondras";
 	var slug = "";
-	for (var i=0;i<3;i++) {
+	for (var i=0;i<4;i++) {
 		var min = "a".charCodeAt(0);
 		var max = "z".charCodeAt(0);
 		var r = min + Math.floor(Math.random() * (max-min+1));
@@ -75,8 +75,24 @@ Game.App.prototype._connect = function() {
 	localStorage.setItem("tetris.server", server);
 	localStorage.setItem("tetris.slug", slug);
 	var url = "https://" + server + ".firebaseio.com/tetris/" + slug;
-	this._firebase = new Firebase(url); /* FIXME timeout */
+	this._firebase = new Firebase(url);
+
+	var timeout = setTimeout(function() {
+		var str = "";
+		str += "Looks like we are having some troubles connecting to the server. Sorry for this!";
+		str += "\n\n";
+		str += "Some possible reasons and ways to fix this:";
+		str += "\n\n";
+		str += "\t1. You are truly offline. Improve your connection and try again.";
+		str += "\n";
+		str += "\t2. My free Firebase account's limit has been reached (50 simultaneous connections). Either try later or use your own Firebase account name in the connection string.";
+		str += "\n";
+		str += "\t3. You browser is not compatible with Firebase's JS client. No luck then.";
+		alert(str);
+	}, 4000);
+
 	this._firebase.once("value", function(snap) {
+		clearTimeout(timeout);
 		this._connected = true;
 		this._dom.connect.classList.add("connected");
 		this._updateMode();
