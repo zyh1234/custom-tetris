@@ -2,9 +2,23 @@
 
 Play the classic Tetris game **the way you like it!** Adjust the rules, *change* the sides!
 
+* Make sure you have a `README` file that includes a brief description of your game, what open source projects (if any) you used, and a screenshot.
+
 ## Instructions
 
-* Make sure you have a `README` file that includes a brief description of your game, what open source projects (if any) you used, and a screenshot.
+Configure the game by choosing an attacker (the one who picks pieces) and a defender (the one who positions pieces). 
+The attacker is given a stash of pieces to pick from; once they are depleted, the stash completely refreshes.
+
+When playing human attacker, either click the pieces or hit number keys to pick them.
+
+When playing human defender, use four arrow keys to position, rotate and drop the current piece.
+
+## Technologies
+
+* Written in vanilla JS, no libraries used
+* Polyfill for *classList*
+* Uses CSS transforms and transitions
+* Uses Firebase as a networking backend
 
 ## DevLog
 
