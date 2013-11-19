@@ -152,6 +152,7 @@ Game.Engine.prototype._setPlaying = function(playing) {
 Game.Engine.prototype._start = function() {
 	if (this._interval) { return; }
 	this._interval = setInterval(this._tick.bind(this), Game.INTERVAL_ENGINE);
+	Game.INTERVAL_ENGINE -= 5;
 }
 
 Game.Engine.prototype._stop = function() {

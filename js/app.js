@@ -22,6 +22,7 @@ Game.App = function() {
 		defender: this._dom.defender.querySelector("select")
 	}
 
+	this._dom.connect.disabled = false;
 	this._dom.server.value = localStorage.getItem("tetris.server") || "ondras";
 	var slug = "";
 	for (var i=0;i<4;i++) {
@@ -70,6 +71,7 @@ Game.App.prototype.handleEvent = function(e) {
 }
 
 Game.App.prototype._connect = function() {
+	this._dom.connect.disabled = true;
 	var server = this._dom.server.value;
 	var slug = this._dom.slug.value;
 	localStorage.setItem("tetris.server", server);
