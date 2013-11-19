@@ -162,6 +162,9 @@ Game.App.prototype._updateDescription = function() {
 }
 
 Game.App.prototype._start = function() {
+	this._dom.connect.removeEventListener("click", this);
+	this._dom.play.removeEventListener("click", this);
+
 	this._dom.left.appendChild(this._dom.defender);
 	this._dom.right.appendChild(this._dom.attacker);
 	
