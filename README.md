@@ -2,7 +2,7 @@
 
 Play the classic Tetris game **the way you like it!** Adjust the rules, *change* the sides!
 
-* Make sure you have a `README` file that includes a brief description of your game, what open source projects (if any) you used, and a screenshot.
+![Screenshot](screenshot.png)
 
 ## Instructions
 
@@ -16,9 +16,10 @@ When playing human defender, use four arrow keys to position, rotate and drop th
 ## Technologies
 
 * Written in vanilla JS, no libraries used
-* Polyfill for *classList*
+* Polyfill for `classList`
 * Uses CSS transforms and transitions
-* Uses Firebase as a networking backend
+* Uses [Firebase](https://www.firebase.com/) as a networking backend
+* Works in FF, Chrome, Opera, Safari, IE10
 
 ## DevLog
 
