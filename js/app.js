@@ -102,22 +102,6 @@ Game.App.prototype._connect = function() {
 }
 
 Game.App.prototype._changePlayer = function(e) {
-	if (this._engine) { /* sanity check to prevent some major changes during gameplay */
-		var types = ["attacker", "defender"];
-		for (var i=0;i<types.length;i++) {
-			var type = types[i];
-			var oldValue = localStorage.getItem("tetris." + type);
-			var newValue = this._select[type].value;
-			if (oldValue == newValue) { continue; }
-
-			if (oldValue == "Network" || newValue == "Network") { /* forbidden */
-				this._select[type].value = oldValue;
-				return;
-			}
-		}
-
-	}
-
 	localStorage.setItem("tetris.attacker", this._select.attacker.value);
 	localStorage.setItem("tetris.defender", this._select.defender.value);
 
@@ -176,6 +160,21 @@ Game.App.prototype._start = function() {
 	}
 	this._createDefender(this._select.defender.value);
 	this._createAttacker(this._select.attacker.value);
+
+	/* disable options that are not supported at runtime */
+	var selects = [this._select.attacker, this._select.defender];
+	for (var i=0;i<selects.length;i++) {
+		var select = selects[i];
+		var options = select.querySelectorAll("option");
+		var value = select.value;
+		for (var j=0;j<options.length;j++) {
+			var option = options[j];
+			option.disabled = (
+				(value == "Network" && option.value != "Network") ||
+				(value != "Network" && option.value == "Network")
+			);
+		}
+	}
 }
 
 Game.App.prototype._createDefender = function(defender) {
