@@ -39,3 +39,5 @@ When playing human defender, use four arrow keys to position, rotate and drop th
 * Day 18: refactoring networking code
 * Day 19: rejoicing at the fixed networking experience, tuning, testing
 * Day 20: release
+* Day 28: final fixes and testing
+
