@@ -41,3 +41,6 @@ When playing human defender, use four arrow keys to position, rotate and drop th
 * Day 20: release
 * Day 28: final fixes and testing
 
+## License
+
+This game is distributed under the terms of the New BSD license.
